@@ -1,0 +1,7 @@
+{
+    "python.analysis.extraPaths": [
+        "./CaribeApp/app/core",
+        "./CaribeApp/app/core/components",
+        "./CaribeApp/app"
+    ]
+}
