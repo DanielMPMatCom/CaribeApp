@@ -3,5 +3,8 @@
         "./CaribeApp/app/core",
         "./CaribeApp/app/core/components",
         "./CaribeApp/app"
+    ],
+    "cSpell.words": [
+        "usuario"
     ]
 }
