@@ -7,16 +7,14 @@ class Navbar(ft.AppBar):
         /,
         page: ft.Page,
         title: str = "Caribe Demo",
+        open_side_bar=lambda: None,
     ) -> None:
 
         ft.AppBar.__init__(self)
         self.page = page
         self.leading = ft.IconButton(
             ft.icons.MENU_SHARP,
-            on_click=lambda _: {
-                setattr(self.page.drawer, "open", True),
-                self.page.drawer.update(),
-            },
+            on_click=lambda _: {open_side_bar()},
             icon_size=24,
         )
 

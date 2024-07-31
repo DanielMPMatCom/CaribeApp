@@ -1,14 +1,13 @@
 import flet as ft
-from src.core.router.pages import Pages
 
 
 class Sidebar(ft.NavigationDrawer):
-    def __init__(self, /, page: ft.Page):
+    def __init__(self, /, page: ft.Page, selected=0, on_change=lambda _: None) -> None:
         ft.NavigationDrawer.__init__(
             self,
             elevation=40,
             selected_index=0,
-            on_change=lambda _: None,
+            on_change=on_change,
             controls=[
                 ft.Container(height=12),
                 ft.Container(
@@ -27,12 +26,10 @@ class Sidebar(ft.NavigationDrawer):
                 ft.NavigationDrawerDestination(
                     icon_content=ft.Icon(ft.cupertino_icons.COMMAND),
                     label="Pullovers",
-                    ref=Pages.PULLOVERS,
                 ),
                 ft.NavigationDrawerDestination(
                     icon_content=ft.Icon(ft.cupertino_icons.QUESTION_CIRCLE),
                     label="Manual de Usuario",
-                    ref=Pages.ABOUT,
                 ),
             ],
         )
