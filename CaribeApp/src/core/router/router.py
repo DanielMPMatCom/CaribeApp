@@ -28,6 +28,8 @@ def initial_view(page: ft.Page):
         ft.View(
             "/",
             controls=[routes[Pages.PULLOVERS]],
+            drawer=Sidebar(page),
+            appbar=Navbar(page),
         )
     )
     page.on_route_change = lambda e: on_route_change(page, e)

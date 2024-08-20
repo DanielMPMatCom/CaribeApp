@@ -11,9 +11,8 @@ def main(page: ft.Page):
     page.theme = THEME
     page.dark_theme = DARK_THEME
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
-    page.drawer = Sidebar(page)
-    page.appbar = Navbar(page)
     initial_view(page)
+    page.update()
 
 
 ft.app(main)
