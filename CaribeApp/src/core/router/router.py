@@ -1,11 +1,9 @@
 import flet as ft
 
-from enum import Enum
+
 from src.modules.pullovers.container.pullovers import Pullovers
 from src.modules.about.container.about import About
 from src.core.router.pages import Pages
-from src.core.components.sidebar import Sidebar
-from src.core.components.navbar import Navbar
 
 
 def initial_view(page: ft.Page):

@@ -1,5 +1,3 @@
-from typing import Any
-from flet import ThemeMode
 import flet as ft
 
 
