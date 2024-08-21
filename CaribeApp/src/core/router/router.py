@@ -7,30 +7,31 @@ from src.core.router.pages import Pages
 from src.core.components.sidebar import Sidebar
 from src.core.components.navbar import Navbar
 
-routes = {
-    Pages.PULLOVERS: Pullovers(),
-    Pages.ABOUT: About(),
-}
-
-
-def on_route_change(page: ft.Page, e: ft.RouteChangeEvent):
-    page.views.append(
-        ft.View(
-            "/",
-            controls=[routes[Pages.PULLOVERS]],
-        )
-    )
-    page.update()
-
 
 def initial_view(page: ft.Page):
-    page.views.append(
+    routes = {
+        Pages.PULLOVERS: Pullovers(page),
+        Pages.ABOUT: About(),
+    }
+
+    ALL_VIEWS = [
         ft.View(
             "/",
             controls=[routes[Pages.PULLOVERS]],
-            drawer=Sidebar(page),
-            appbar=Navbar(page),
-        )
-    )
+        ),
+        ft.View(
+            "/about",
+            controls=[routes[Pages.ABOUT]],
+        ),
+    ]
+
+    def on_route_change(page: ft.Page, e: ft.RouteChangeEvent):
+        print(f"Route changed to: {e.route}")
+        for view in ALL_VIEWS:
+            if view.route == e.route:
+                page.controls = view.controls
+
+        page.update()
+
     page.on_route_change = lambda e: on_route_change(page, e)
-    page.update()
+    page.go(Pages.PULLOVERS.value)

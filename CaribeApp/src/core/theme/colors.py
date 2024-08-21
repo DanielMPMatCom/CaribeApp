@@ -49,4 +49,5 @@ DARK_THEME: ft.Theme = ft.Theme(
             font_family="Roboto",
         ),
     ),
+    primary_color="#8A0F12",
 )

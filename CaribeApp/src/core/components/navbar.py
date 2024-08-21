@@ -1,5 +1,4 @@
 import flet as ft
-from src.lib.findView import find_view
 
 
 class Navbar(ft.AppBar):
@@ -15,8 +14,8 @@ class Navbar(ft.AppBar):
         self.leading = ft.IconButton(
             ft.icons.MENU_SHARP,
             on_click=lambda _: {
-                setattr(find_view(self.page).drawer, "open", True),
-                find_view(self.page).drawer.update(),
+                setattr(self.page.drawer, "open", True),
+                self.page.drawer.update(),
             },
             icon_size=24,
         )

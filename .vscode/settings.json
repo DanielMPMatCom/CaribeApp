@@ -5,6 +5,9 @@
         "./CaribeApp/app"
     ],
     "cSpell.words": [
+        "Cupertino",
+        "flet",
         "usuario"
-    ]
+    ],
+    "cSpell.language": "en,es-ES"
 }
