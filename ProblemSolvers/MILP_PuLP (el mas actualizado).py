@@ -53,9 +53,9 @@ prob += pulp.lpSum(x[i] for i in facultades_restantes) == nuevo_total
 # Restricción: cada facultad recibe exactamente un color
 for i in facultades_restantes:
     prob += pulp.lpSum(y[i, j] for j in colores) == 1
-    color_preferido = preferencias.get(i, None)
-    if color_preferido:
-        prob += y[i, color_preferido] == 1
+    # color_preferido = preferencias.get(i, None)
+    # if color_preferido:
+    #     prob += y[i, color_preferido] == 1
     for j in colores:
         if y[i,j]:
             prob += x[i] <= pullovers_disponibles[j]
@@ -119,18 +119,25 @@ def restriction_3(prob):
             if a in atletas and b in atletas and atletas[a] > atletas[b]:
                 prob += x[a] >= x[b]
 
+def restriction_4(prob):
+    for i in facultades_restantes:
+        color_preferido = preferencias.get(i, None)
+        if color_preferido:
+            prob += y[i, color_preferido] == 1
+
 # Añadir restricciones en orden de prioridad
 add_constraint(restriction_0, 0)
 add_constraint(restriction_1, 1)
 add_constraint(restriction_2, 2)
 add_constraint(restriction_3, 3)
+add_constraint(restriction_4, 4)
 
 # Función objetivo
 # Minimizar la suma de las diferencias absolutas
 prob += pulp.lpSum(diferencia[i] for i in facultades_restantes if i in atletas)
 
 # Resolver el problema final
-prob.solve()
+prob.solve(pulp.PULP_CBC_CMD(timeLimit=30))
 
 # Actualizar pullovers disponibles después de la asignación
 for i in facultades_restantes:
@@ -157,13 +164,10 @@ for grupo, (cantidad, color) in pullovers_asignados.items():
         ao += cantidad
     else:
         g += cantidad
+
 print(f"\nTotal: {total} pullovers asignados")
 print(f'AC: {ac} pullovers')
 print(f'AO: {ao} pullovers')
 print(f'G: {g} pullovers')
-
-
-
-
 
 
