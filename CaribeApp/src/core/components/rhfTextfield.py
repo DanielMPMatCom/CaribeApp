@@ -13,6 +13,7 @@ class RHFTexField(ft.Container):
         onChange=None,
         onBlur=None,
         required=False,
+        keyboard=None,
     ):
         self.label = label
         self.onChange = onChange
@@ -44,6 +45,7 @@ class RHFTexField(ft.Container):
                         ),
                         height=48,
                         border_color="#f4f4f4",
+                        keyboard_type=keyboard,
                     ),
                 ],
             ),
