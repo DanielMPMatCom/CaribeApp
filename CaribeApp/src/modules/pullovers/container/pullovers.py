@@ -253,6 +253,17 @@ class Pullovers(ft.Container):
                         ),
                         col=12,
                     ),
+                    ft.Divider(color=ft.colors.BLACK12),
+                    ft.CupertinoButton(
+                        text="Repartir",
+                        bgcolor="#8A0F12",
+                        color=(ft.colors.WHITE),
+                        on_click=lambda _: add_new_input_combo(
+                            self.inputs_container_pullovers
+                        ),
+                        col=12,
+                        icon=ft.cupertino_icons.PLAY,
+                    ),
                 ],
             ),
         )
