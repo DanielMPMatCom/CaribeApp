@@ -24,7 +24,7 @@ def initial_view(page: ft.Page):
     ]
 
     def on_route_change(page: ft.Page, e: ft.RouteChangeEvent):
-        print(f"Route changed to: {e.route}")
+
         for view in ALL_VIEWS:
             if view.route == e.route:
                 page.controls = view.controls

@@ -179,7 +179,7 @@ class Color(ft.Container):
 class CardAnswerContainer(ft.Card):
     def __init__(self, name, value):
         text = name + " " + str(value[0]) + " " + str(value[1])
-        print(text)
+
         ft.Card.__init__(
             self,
             content=ft.Container(
@@ -281,8 +281,6 @@ class Pullovers(ft.Container):
             incomplete_data = False
             if not self.fields[0] or not self.fields[1]:
                 incomplete_data = True
-                print(self.fields[0].name, " ", self.fields[0].value)
-                print(self.fields[1].name, " ", self.fields[1].value)
 
             colors: list[colorClass] = []
             for i in self.inputs_container_colors.controls:
@@ -291,7 +289,6 @@ class Pullovers(ft.Container):
                 for f in i.fields:
                     if f.required and not f.value:
                         incomplete_data = True
-                        print(f.name, " ", f.value)
 
                 if not incomplete_data:
                     colors.append(colorClass(*[v.value for v in i.fields]))
@@ -301,13 +298,12 @@ class Pullovers(ft.Container):
                 for f in i.fields:
                     if f.required and not f.value:
                         incomplete_data = True
-                        print(f.name, " ", f.value)
 
                 if not incomplete_data:
                     facultades.append(facultadClass(*[v.value for v in i.fields]))
 
             if incomplete_data:
-                print("+++++++++++++++++++ DATA INCOMPLETA ++++++++++++++++++++")
+
                 page.snack_bar = ft.SnackBar(
                     content=ft.Text("Revise los datos, existen campos vacíos"),
                     action="Cerrar",
@@ -330,15 +326,6 @@ class Pullovers(ft.Container):
                 for c in colors:
                     colors_dict[c.name] = c.cantidad
 
-                print("=============================================")
-                print("Nombre de las facultades")
-                print(facultades_name)
-                print("Atletas")
-                print(athletes_dict)
-                print("Colors")
-                print(colors_dict)
-                print("")
-                print("=============================================")
                 try:
                     ans = PuLP_Solver(
                         facultades_name,
@@ -349,12 +336,10 @@ class Pullovers(ft.Container):
                         self.fields[1].value,
                         favorite_colors_dict,
                     )
-                    print("fin del request")
-                    print(ans.assigned_pullovers)
+
                     parse_data = []
                     for ans in ans.assigned_pullovers.items():
                         parse_data.append([ans[0], ans[1]])
-                        print(parse_data)
 
                     self.ans_container.controls = [
                         CardAnswerContainer(name=i[0], value=i[1]) for i in parse_data
