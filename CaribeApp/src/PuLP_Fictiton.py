@@ -1,6 +1,6 @@
 import pulp, random
 
-def PuLP_Solver(faculties, athletes, ranking, available_pullovers, pullovers_for_referees_and_teachers, pullovers_for_aaac, preferences = {}):
+def PuLP_Solver(faculties, athletes, ranking, available_pullovers, pullovers_for_referees_and_teachers, pullovers_for_aaac, preferences={}, solver_name='PULP_CBC_CMD', time_limit=30):
     colors = [color for color in available_pullovers.keys()]
     total_pullovers = sum(amount for amount in available_pullovers.values())
 
@@ -127,7 +127,8 @@ def PuLP_Solver(faculties, athletes, ranking, available_pullovers, pullovers_for
     prob += pulp.lpSum(difference[i] for i in remaining_faculties if i in athletes)
 
     # Solve the final problem
-    prob.solve(pulp.PULP_CBC_CMD(timeLimit=30))
+    solver = pulp.getSolver(solver_name, timeLimit=time_limit)
+    prob.solve(solver)
 
     # Update available pullovers after the assignment
     for i in remaining_faculties:
@@ -142,7 +143,10 @@ def PuLP_Solver(faculties, athletes, ranking, available_pullovers, pullovers_for
 
     return assigned_pullovers
 
-# assignation = PuLP_Solver(['ISRI', 'MATCOM', 'DER', 'TUR'], {'ISRI': 80, 'MATCOM': 80, 'DER': 20, 'TUR': 50}, {'ISRI': 1, 'MATCOM': 2, 'DER': 3, 'TUR': 5}, {'A': 100, 'B': 100, 'C': 100}, 50, 30, {'ISRI': 'A', 'MATCOM': 'B', 'DER': 'B', 'TUR': 'C'})
+# gurobipy
+assignation = PuLP_Solver(['ISRI', 'MATCOM', 'DER', 'TUR'], {'ISRI': 80, 'MATCOM': 80, 'DER': 20, 'TUR': 50}, {'ISRI': 1, 'MATCOM': 2, 'DER': 3, 'TUR': 5}, {'A': 100, 'B': 100, 'C': 100}, 50, 30, {'ISRI': 'A', 'MATCOM': 'B', 'DER': 'B', 'TUR': 'C'}, solver_name='GUROBI')
 
-# for faculty, (pullovers, color) in assignation.items():
-#     print(f'{faculty}: {pullovers} pullovers colour {color}')  
+for faculty, (pullovers, color) in assignation.items():
+    print(f'{faculty}: {pullovers} pullovers colour {color}')  
+
+print(pulp.listSolvers(onlyAvailable=True))
