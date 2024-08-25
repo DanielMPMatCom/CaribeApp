@@ -178,15 +178,22 @@ class Color(ft.Container):
 
 class CardAnswerContainer(ft.Card):
     def __init__(self, name, value):
-        text = name + " " + value[0] + " " + value[1]
+        text = name + " " + str(value[0]) + " " + str(value[1])
         print(text)
         ft.Card.__init__(
             self,
             content=ft.Container(
-                padding=[4, 4, 4, 4],
-                content=ft.Text("text"),
+                content=ft.Column(
+                    [
+                        ft.ListTile(
+                            leading=ft.Icon(ft.icons.LEADERBOARD),
+                            title=ft.Text(text),
+                        ),
+                    ]
+                ),
+                width=1568,
+                padding=8,
             ),
-            elevation=1,
         )
 
 
@@ -346,7 +353,7 @@ class Pullovers(ft.Container):
                     print(ans.assigned_pullovers)
                     parse_data = []
                     for ans in ans.assigned_pullovers.items():
-                        parse_data.append([str(ans[0]), str(ans[1])])
+                        parse_data.append([ans[0], ans[1]])
                         print(parse_data)
 
                     self.ans_container.controls = [
