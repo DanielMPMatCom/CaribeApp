@@ -21,6 +21,7 @@ class FieldClass:
     def __init__(
         self,
         name: str,
+        cast: callable,
         value=None,
         /,
         placeholder: str = None,
@@ -30,6 +31,7 @@ class FieldClass:
         self.value = value
         self.required = required
         self.placeholder = placeholder
+        self.cast = cast
 
 
 class Facultad(ft.Container):
@@ -44,11 +46,11 @@ class Facultad(ft.Container):
             data=self.fields[3].value,
             border_color="#f4f4f4",
             error_text="No hay colores disponibles" if colores.__len__() <= 0 else "",
-            # on_change=lambda x: onChange(x, 3),
+            on_change=lambda x: onChange(x, 3),
         )
 
         def onChange(newValue: ft.ControlEvent, index):
-            self.fields[index].value = newValue.data
+            self.fields[index].value = self.fields[index].cast(newValue.data)
 
         ft.Container.__init__(
             self,
@@ -100,10 +102,14 @@ class Facultad(ft.Container):
 
     def init_state(self):
         self.fields = [
-            FieldClass("Nombre de la facultad"),
-            FieldClass("Posición en el juego pasado"),
-            FieldClass("Cantidad de deportistas", required=False),
-            FieldClass("Color preferido", required=False),
+            FieldClass("Nombre de la facultad", lambda x: str(x)),
+            FieldClass("Posición en el juego pasado", lambda x: int(x)),
+            FieldClass("Cantidad de deportistas", lambda x: int(x), required=False),
+            FieldClass(
+                "Color preferido",
+                lambda x: str(x),
+                required=False,
+            ),
         ]
 
 
@@ -121,7 +127,7 @@ class Color(ft.Container):
         self.remove_input = remove
 
         def onChange(newValue: ft.ControlEvent, index):
-            self.fields[index].value = newValue.data
+            self.fields[index].value = self.fields[index].cast(newValue.data)
 
         ft.Container.__init__(
             self,
@@ -165,9 +171,23 @@ class Color(ft.Container):
 
     def init_state(self):
         self.fields = [
-            FieldClass("Nombre del color", None),
-            FieldClass("Cantidad de pullovers", None),
+            FieldClass("Nombre del color", lambda x: str(x)),
+            FieldClass("Cantidad de pullovers", lambda x: int(x)),
         ]
+
+
+class CardAnswerContainer(ft.Card):
+    def __init__(self, name, value):
+        text = name + " " + value[0] + " " + value[1]
+        print(text)
+        ft.Card.__init__(
+            self,
+            content=ft.Container(
+                padding=[4, 4, 4, 4],
+                content=ft.Text("text"),
+            ),
+            elevation=1,
+        )
 
 
 class Pullovers(ft.Container):
@@ -202,7 +222,7 @@ class Pullovers(ft.Container):
             update_colors_of_facultades()
 
         def onChange(newValue: ft.ControlEvent, index):
-            self.fields[index].value = newValue.data
+            self.fields[index].value = self.fields[index].cast(newValue.data)
 
         def update_colors_of_facultades():
             colores = get_colors()
@@ -243,6 +263,8 @@ class Pullovers(ft.Container):
         self.inputs_container_pullovers = ft.Column(
             controls=[],
         )
+
+        self.ans_container = ft.Column(controls=[])
 
         def execute_bk():
             self.page.window_progress_bar = ft.ProgressBar(color=ft.colors.GREEN_500)
@@ -320,13 +342,25 @@ class Pullovers(ft.Container):
                         self.fields[1].value,
                         favorite_colors_dict,
                     )
-                    print(ans)
+                    print("fin del request")
+                    print(ans.assigned_pullovers)
+                    parse_data = []
+                    for ans in ans.assigned_pullovers.items():
+                        parse_data.append([str(ans[0]), str(ans[1])])
+                        print(parse_data)
+
+                    self.ans_container.controls = [
+                        CardAnswerContainer(name=i[0], value=i[1]) for i in parse_data
+                    ]
+                    self.ans_container.update()
+
                 except Exception as e:
                     page.snack_bar = ft.SnackBar(
                         content=ft.Text(e),
                         action="Cerrar",
                     )
-                page.snack_bar.open = True
+                    page.snack_bar.open = True
+
                 page.update()
 
             self.page.window_progress_bar = None
@@ -392,12 +426,13 @@ class Pullovers(ft.Container):
                         ],
                         alignment=ft.MainAxisAlignment.END,
                     ),
+                    self.ans_container,
                 ],
             ),
         )
 
     def init_state(self):
         self.fields = [
-            FieldClass("Cantidad para árbitros y profesores"),
-            FieldClass("Cantidad para antiguos atletas"),
+            FieldClass("Cantidad para árbitros y profesores", lambda x: int(x)),
+            FieldClass("Cantidad para antiguos atletas", lambda x: int(x)),
         ]
