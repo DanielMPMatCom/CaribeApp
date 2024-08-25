@@ -1,11 +1,31 @@
 import pulp, random
 
-class PuLP_Solver():
-    def __init__(self, faculties, athletes, ranking, available_pullovers, p_referees_and_teachers, p_aaac, preferences = {}):
+
+class PuLP_Solver:
+    def __init__(
+        self,
+        faculties,
+        athletes,
+        ranking,
+        available_pullovers,
+        p_referees_and_teachers,
+        p_aaac,
+        preferences={},
+    ):
+
+        print("++++++++++++++++++++++ DATA PASADA ++++++++++++++")
+        print("facultades", faculties)
+        print("atletas", athletes)
+        print("ranking", athletes)
+        print("available pullovers", available_pullovers)
+        print("teachers", p_referees_and_teachers)
+        print("acc", p_aaac)
+        print("preferecne", preferences)
+
         self.faculties = faculties
         self.athletes = athletes
         self.ranking = ranking
-        
+
         self.colors = [color for color in available_pullovers.keys()]
         self.total_pullovers = sum(amount for amount in available_pullovers.values())
         self.available_pullovers = available_pullovers
@@ -16,6 +36,16 @@ class PuLP_Solver():
         self.preferences = preferences
         self.new_total = self.total_pullovers
 
+        print("+++++++++++++++++++++ DATA REQUEST +++++++++++++++++++++++")
+        print("facultades", self.faculties)
+        print("atletas", self.athletes)
+        print("ranking", self.ranking)
+        print("colors", self.colors)
+        print("pullovers", self.total_pullovers)
+        print("aviable pullovers", self.available_pullovers)
+        print("pullovers_for_aaac", self.pullovers_for_aaac)
+        print("preferences", self.preferences)
+
         self._referees_teachers_aaac()
         self._faculties_under_10()
         self._main_problem()
@@ -24,38 +54,61 @@ class PuLP_Solver():
     def _referees_teachers_aaac(self):
         self.assigned_pullovers = {}
 
-        for group in ['referees', 'teachers', 'AAAC']:
+        for group in ["referees", "teachers", "AAAC"]:
             random_color = random.choice(self.colors)
-            if group == 'AAAC':
+            if group == "AAAC":
                 amount = self.pullovers_for_aaac
             else:
                 amount = self.pullovers_for_referees_and_teachers // 2
-            
+
             self.available_pullovers[random_color] -= amount
             self.assigned_pullovers[group] = (amount, random_color)
             self.new_total -= amount
 
     # Initial assignment for faculties with fewer than 10 athletes
     def _faculties_under_10(self):
-        self.faculties_under_10 = {i: self.athletes[i] for i in self.faculties if i in self.athletes and self.athletes[i] < 10}
+        self.faculties_under_10 = {
+            i: self.athletes[i]
+            for i in self.faculties
+            if i in self.athletes and self.athletes[i] < 10
+        }
 
         for fac, num in self.faculties_under_10.items():
             preferred_color = self.preferences.get(fac, random.choice(self.colors))
             self.available_pullovers[preferred_color] -= num
             self.new_total -= num
             self.assigned_pullovers[fac] = (num, preferred_color)
-        self.remaining_faculties = [i for i in self.faculties if i not in self.faculties_under_10]
+        self.remaining_faculties = [
+            i for i in self.faculties if i not in self.faculties_under_10
+        ]
 
     def _main_problem(self):
         # Create the optimization problem
         prob = pulp.LpProblem("Pullover_Distribution", pulp.LpMinimize)
 
         # Define decision variables
-        x = {i: pulp.LpVariable(f"x_{i}", lowBound=0, cat="Integer") for i in self.remaining_faculties}
-        y = {(i, j): pulp.LpVariable(f"y_{i}_{j}", cat="Binary") for i in self.remaining_faculties for j in self.colors}
-        proportions = {i: pulp.LpVariable(f"proportion_{i}", lowBound=0) for i in self.remaining_faculties}
-        difference = {i: pulp.LpVariable(f"difference_{i}", lowBound=0) for i in self.remaining_faculties}
-        z = {(i, j): pulp.LpVariable(f"z_{i}_{j}", lowBound=0, cat="Continuous") for i in self.remaining_faculties for j in self.colors}
+        x = {
+            i: pulp.LpVariable(f"x_{i}", lowBound=0, cat="Integer")
+            for i in self.remaining_faculties
+        }
+        y = {
+            (i, j): pulp.LpVariable(f"y_{i}_{j}", cat="Binary")
+            for i in self.remaining_faculties
+            for j in self.colors
+        }
+        proportions = {
+            i: pulp.LpVariable(f"proportion_{i}", lowBound=0)
+            for i in self.remaining_faculties
+        }
+        difference = {
+            i: pulp.LpVariable(f"difference_{i}", lowBound=0)
+            for i in self.remaining_faculties
+        }
+        z = {
+            (i, j): pulp.LpVariable(f"z_{i}_{j}", lowBound=0, cat="Continuous")
+            for i in self.remaining_faculties
+            for j in self.colors
+        }
 
         # Constraint: the sum of the pullovers assigned to all faculties must equal the total available
         prob += pulp.lpSum(x[i] for i in self.remaining_faculties) == self.new_total
@@ -73,7 +126,10 @@ class PuLP_Solver():
 
         # Constraint: the sum of pullovers assigned of the same color must not exceed the amount available for that color
         for j in self.colors:
-            prob += pulp.lpSum(z[i, j] for i in self.remaining_faculties) <= self.available_pullovers[j]
+            prob += (
+                pulp.lpSum(z[i, j] for i in self.remaining_faculties)
+                <= self.available_pullovers[j]
+            )
 
         # Relationship between z[i, j], x[i], y[i, j]
         for i in self.remaining_faculties:
@@ -98,7 +154,7 @@ class PuLP_Solver():
             prob_copy = prob.copy()  # Create a copy of the current problem
             constraint_function(prob_copy)  # Try adding the constraint
             prob_copy.solve()
-            if pulp.LpStatus[prob_copy.status] == 'Optimal':
+            if pulp.LpStatus[prob_copy.status] == "Optimal":
                 # If the problem is feasible with the new constraint, add it
                 constraint_function(prob)
             else:
@@ -123,7 +179,11 @@ class PuLP_Solver():
         def constraint_3(prob):
             for a in self.remaining_faculties:
                 for b in self.remaining_faculties:
-                    if a in self.athletes and b in self.athletes and self.athletes[a] > self.athletes[b]:
+                    if (
+                        a in self.athletes
+                        and b in self.athletes
+                        and self.athletes[a] > self.athletes[b]
+                    ):
                         prob += x[a] >= x[b]
 
         def constraint_4(prob):
@@ -141,7 +201,9 @@ class PuLP_Solver():
 
         # Objective function
         # Minimize the sum of absolute differences
-        prob += pulp.lpSum(difference[i] for i in self.remaining_faculties if i in self.athletes)
+        prob += pulp.lpSum(
+            difference[i] for i in self.remaining_faculties if i in self.athletes
+        )
 
         # Solve the final problem
         prob.solve(pulp.PULP_CBC_CMD(timeLimit=30))
@@ -165,17 +227,18 @@ class PuLP_Solver():
         for group, (amount, color) in self.assigned_pullovers.items():
             print(f"{group}: {amount} pullovers of color {color}")
             total += amount
-            if color == 'AC':
-                ac += amount
-            elif color == 'AO':
-                ao += amount
-            else:
-                g += amount
+
+        for color in self.colors:
+            print(color)
+
+        print("Debug")
+        for faculty in self.faculties:
+            print(
+                f"{faculty}: assigned pullovers {self.assigned_pullovers[faculty]}, ranking {self.ranking[faculty]}, athletes {self.athletes[faculty]}"
+            )
 
         print(f"\nTotal: {total} pullovers assigned")
-        print(f'AC: {ac} pullovers')
-        print(f'AO: {ao} pullovers')
-        print(f'G: {g} pullovers')
+
 
 # solution = PuLP_Solver(
 #     ['FTur', 'Eko', 'Lex', 'FCom', 'ConFin', 'Psico', 'FLEx', 'FHS', 'MatCom', 'ISDi', 'Geo', 'IFAL', 'FBio', 'FQ', 'FAyL', 'FF', 'InSTec', 'FENHI'],
