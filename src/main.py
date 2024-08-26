@@ -179,7 +179,10 @@ def main():
                     st.error("Error: Faltan datos en las facultades")
                     return
                 nombre_de_las_facultades.append(i.data[0])
-                athletes[i.data[0]] = i.data[2]
+                
+                if i.data[2] != 0:
+                    athletes[i.data[0]] = i.data[2]
+
                 if i.data[3] != "Sin color preferido":
                     preferences[i.data[0]] = i.data[3]
 
@@ -234,6 +237,5 @@ if __name__ == "__main__":
         page_icon=":",
         layout="wide",
         initial_sidebar_state="expanded",
-        
     )
     main()
