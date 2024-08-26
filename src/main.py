@@ -72,7 +72,6 @@ def main():
 
     st.title("Caribe Demo")
     st.divider()
-    st.text("Pullovers")
     gridinit = st.columns(2)
     with gridinit[0]:
         arbitros = st.number_input(
