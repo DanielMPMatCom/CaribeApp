@@ -18,12 +18,18 @@ def PuLP_Solver(
     assigned_pullovers = {}
 
     # Assigning pullovers to referees, teachers, and AAAC
-    for group in ["referees", "teachers", "AAAC"]:
-        random_color = random.choice(colors)
+    for group in ["Árbitros", "Profesores", "AAAC"]:
         if group == "AAAC":
             amount = pullovers_for_aaac
         else:
             amount = pullovers_for_referees_and_teachers // 2
+
+        available = [color for color in available_pullovers if available_pullovers[color] >= amount]
+        
+        if not available:
+            continue
+        
+        random_color = random.choice(available)
 
         available_pullovers[random_color] -= amount
         assigned_pullovers[group] = (amount, random_color)
@@ -40,6 +46,9 @@ def PuLP_Solver(
         new_total -= num
         assigned_pullovers[fac] = (num, preferred_color)
     remaining_faculties = [i for i in faculties if i not in faculties_under_10]
+
+    if not remaining_faculties:
+        return assigned_pullovers
 
     # Create the optimization problem
     prob = pulp.LpProblem("Pullover_Distribution", pulp.LpMinimize)

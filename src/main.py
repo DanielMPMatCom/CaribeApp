@@ -54,6 +54,20 @@ faculty_data_storage: list[FacultyData] = []
 
 def main():
 
+    st.markdown(
+        """
+    <style>
+        .step-down {
+            display: none
+            }
+        .step-up {
+            display: none
+        }
+    </style>
+    """,
+        unsafe_allow_html=True,
+    )
+
     stc = st.columns(4)
     with stc[0]:
         st.title("Caribe Demo")
@@ -179,7 +193,7 @@ def main():
                     st.error("Error: Faltan datos en las facultades")
                     return
                 nombre_de_las_facultades.append(i.data[0])
-                
+
                 if i.data[2] != 0:
                     athletes[i.data[0]] = i.data[2]
 
@@ -199,6 +213,7 @@ def main():
                 st.error(
                     "Error: Es necesario saber la cantidad de atletas de al menos una facultad"
                 )
+                return
 
             pullovers = {}
 
