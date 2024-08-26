@@ -78,7 +78,7 @@ def PuLP_Solver(
 
     # Constraint: each faculty must receive at least 1 pullover
     for i in remaining_faculties:
-        prob += x[i] >= 1
+        prob += x[i] >= 10
 
     # Constraint: the sum of pullovers assigned of the same color must not exceed the amount available for that color
     for j in colors:
