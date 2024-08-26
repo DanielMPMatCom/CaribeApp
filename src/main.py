@@ -74,10 +74,13 @@ def main():
     st.divider()
     st.text("Pullovers")
 
-    arbitros = st.number_input(
-        "Cantidad de colores para árbitros y maestros *", min_value=0
-    )
-    aacc = st.number_input("Cantidad de colores para Antiguos Atletas *", min_value=0)
+    with st.columns(2):
+        arbitros = st.number_input(
+            "Cantidad de colores para árbitros y maestros *", min_value=0
+        )
+        aacc = st.number_input(
+            "Cantidad de colores para Antiguos Atletas *", min_value=0
+        )
 
     st.divider()
 
@@ -92,7 +95,7 @@ def main():
 
     def add_row_color(row):
         with container_colors:
-            grid = st.columns(4)
+            grid = st.columns(2)
             with grid[0]:
                 colors_data_storage[r].data[0] = st.text_input(
                     "Color *",
