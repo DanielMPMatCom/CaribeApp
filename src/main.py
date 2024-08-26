@@ -223,8 +223,7 @@ def main():
                 st.error(f"Error: {e}")
 
     st.button(
-        "Execute",
-        on_click=lambda: bk_request(end_container),
+        "Execute", on_click=lambda: bk_request(end_container), use_container_width=True
     )
     end_container = st.container()
 
@@ -235,5 +234,6 @@ if __name__ == "__main__":
         page_icon=":",
         layout="wide",
         initial_sidebar_state="expanded",
+        
     )
     main()
