@@ -2,22 +2,6 @@ import streamlit as st
 from PuLP_Solver import PuLP_Solver
 
 
-def execute_text():
-    assignation = PuLP_Solver(
-        ["ISRI", "MATCOM", "DER", "TUR"],
-        {"ISRI": 80, "MATCOM": 80, "DER": 20, "TUR": 50},
-        {"ISRI": 1, "MATCOM": 2, "DER": 3, "TUR": 5},
-        {"A": 100, "B": 100, "C": 100},
-        50,
-        30,
-        {"ISRI": "A", "MATCOM": "B", "DER": "B", "TUR": "C"},
-    )
-
-    for faculty, (pullovers, color) in assignation.items():
-        print(f"{faculty}: {pullovers} pullovers color {color}")
-        st.info(f"{faculty}: {pullovers} pullovers color {color}")
-
-
 class GenericInputData:
     def __init__(
         self,
@@ -70,14 +54,25 @@ faculty_data_storage: list[FacultyData] = []
 
 def main():
 
-    st.title("Caribe Demo")
+    stc = st.columns(4)
+    with stc[0]:
+        st.title("Caribe Demo")
+
+    with stc[1]:
+        st.image(
+            "./src/indio.png",
+            caption="",
+            width=90,
+        )
+
     st.divider()
-    gridinit = st.columns(2)
-    with gridinit[0]:
+    grid_init = st.columns(2)
+    with grid_init[0]:
         arbitros = st.number_input(
             "Cantidad de colores para árbitros y maestros *", min_value=0
         )
-    with gridinit[1]:
+
+    with grid_init[1]:
         aacc = st.number_input(
             "Cantidad de colores para Antiguos Atletas *", min_value=0
         )
@@ -161,25 +156,83 @@ def main():
             faculty_data_storage.append(FacultyData())
         add_row_faculty(r)
 
-    def testing():
-        st.error(arbitros)
-        st.error(aacc)
+    def bk_request(container):
+        with container:
+            if arbitros == 0:
+                st.info(
+                    "Info: Revise los campos, la cantidad de pullovers seleccionados para los árbitros es 0"
+                )
+            if aacc == 0:
+                st.info(
+                    "Info: Revise los campos, la cantidad de pullovers seleccionados para los Antiguos Atletas es 0"
+                )
 
-        for i in faculty_data_storage:
-            st.info(i.get_values())
+            nombre_de_las_facultades = []
+            athletes = {}
+            ranking = {}
+            ranking_inverso = {}
+            preferences = {}
+            some_faculty_has_athlete = False
 
-        for i in colors_data_storage:
-            st.success(i.get_values())
+            for i in faculty_data_storage:
+                if i.data[0] == "":
+                    st.error("Error: Faltan datos en las facultades")
+                    return
+                nombre_de_las_facultades.append(i.data[0])
+                athletes[i.data[0]] = i.data[2]
+                if i.data[3] != "Sin color preferido":
+                    preferences[i.data[0]] = i.data[3]
 
-    container_colors = st.container()
+                if i.data[1] in ranking_inverso.keys():
+                    st.error(
+                        f"Error: Facultad {i.data[0]} y {ranking_inverso[i.data[1]]} tienen el puesto {i.data[1]} el ranking"
+                    )
+                    return
+                ranking[i.data[0]] = i.data[1]
+                if i.data[2] != 0:
+                    some_faculty_has_athlete = True
 
-    st.button("Execute", on_click=testing)
+            if not some_faculty_has_athlete:
+                st.error(
+                    "Error: Es necesario saber la cantidad de atletas de al menos una facultad"
+                )
+
+            pullovers = {}
+
+            for i in colors_data_storage:
+                if i.data[0] == "" or not i.data[0]:
+                    st.error("Error: Faltan datos en los colores")
+                    return
+
+                pullovers[i.data[0]] = i.data[1]
+            try:
+                ans = PuLP_Solver(
+                    faculties=nombre_de_las_facultades,
+                    athletes=athletes,
+                    ranking=ranking,
+                    available_pullovers=pullovers,
+                    pullovers_for_referees_and_teachers=arbitros,
+                    pullovers_for_aaac=aacc,
+                    preferences=preferences,
+                )
+                print(ans)
+                for i in ans.items():
+                    st.success(f"{i[0]}: {i[1][0]} Pullovers de Color {i[1][1]}")
+
+            except Exception as e:
+                st.error(f"Error: {e}")
+
+    st.button(
+        "Execute",
+        on_click=lambda: bk_request(end_container),
+    )
+    end_container = st.container()
 
 
 if __name__ == "__main__":
     st.set_page_config(
         page_title="Caribe Demo",
-        # page_icon=":green_book:",
+        page_icon=":",
         layout="wide",
         initial_sidebar_state="expanded",
     )
