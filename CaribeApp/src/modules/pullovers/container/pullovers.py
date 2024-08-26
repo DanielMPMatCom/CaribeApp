@@ -327,7 +327,7 @@ class Pullovers(ft.Container):
                     colors_dict[c.name] = c.cantidad
 
                 try:
-                    ans = PuLP_Solver(
+                    answer = PuLP_Solver(
                         facultades_name,
                         athletes_dict,
                         ranking_dict,
@@ -336,9 +336,13 @@ class Pullovers(ft.Container):
                         self.fields[1].value,
                         favorite_colors_dict,
                     )
-
+                    print(
+                        "ATLETAS",
+                        athletes_dict,
+                    )
+                    print("RANKING", ranking_dict)
                     parse_data = []
-                    for ans in ans.assigned_pullovers.items():
+                    for ans in answer.items():
                         parse_data.append([ans[0], ans[1]])
 
                     self.ans_container.controls = [
