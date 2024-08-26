@@ -73,11 +73,12 @@ def main():
     st.title("Caribe Demo")
     st.divider()
     st.text("Pullovers")
-
-    with st.columns(2):
+    gridinit = st.columns(2)
+    with gridinit[0]:
         arbitros = st.number_input(
             "Cantidad de colores para árbitros y maestros *", min_value=0
         )
+    with gridinit[1]:
         aacc = st.number_input(
             "Cantidad de colores para Antiguos Atletas *", min_value=0
         )
