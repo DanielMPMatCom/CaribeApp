@@ -173,10 +173,10 @@ Por último en ese mismo menú, al entrar a `Print` se podrá obtener una versi�
 7. Estudio de los métodos de solución del problema a resolver.
 8. En paralelo: Desarrollo de la aplicación y exploración de métodos de soluciones al problema.
 9. Elección del método de solución, iteraciones de prueba para mejorar la solución. Avance en el desarrollo de la aplicación.
-10. Consultas al cliente sobre los requerimientos y la prioridad de las restricciones del problema. Cambio de tecnología en el desarrollo de la aplicación por incompatibilidad con paquetes de python.
+10. Consultas al cliente sobre los requerimientos y la prioridad de las restricciones del problema. Cambio de tecnología en el desarrollo de la aplicación por incompatibilidad con paquetes de python (Flutter a Flet).
 11. Modificaciones al código y aproximación a la solución definitiva. En paralelo continúa el desarrollo de la aplicación con la nueva tecnología.
 12. Encontrada solución al problema, arreglando detalles. Aplicación casi terminada.
-13. Problemas con los paquetes de python al integrar ambas partes. Nueva incopatibilidad de las tecnologías. Búsqueda de posibles soluciones.
+13. Problemas con los paquetes de python al integrar ambas partes (Permisos de la app al ser ejecutada en android debido al uso de la consola). Nueva incopatibilidad de las tecnologías. Búsqueda de posibles soluciones.
 14. Consulta al cliente sobre posible cambio de tecnología al no encontrar solución al problema.
-15. Finalmente cambio de tecnología y de concepción de la apliación. Nuevo proceso de desarrollo e investigación de la nueva tecnología.
+15. Finalmente cambio de tecnología (streamlit) y de concepción de la apliación. Nuevo proceso de desarrollo e investigación de la nueva tecnología.
 16. Producto funcional. 
