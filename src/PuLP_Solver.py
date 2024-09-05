@@ -178,9 +178,3 @@ def PuLP_Solver(
         assigned_pullovers[i] = (assigned_amount, assigned_color)
 
     return assigned_pullovers
-
-
-# assignation = PuLP_Solver(['ISRI', 'MATCOM', 'DER', 'TUR'], {'ISRI': 80, 'MATCOM': 80, 'DER': 20, 'TUR': 50}, {'ISRI': 1, 'MATCOM': 2, 'DER': 3, 'TUR': 5}, {'A': 100, 'B': 100, 'C': 100}, 50, 30, {'ISRI': 'A', 'MATCOM': 'B', 'DER': 'B', 'TUR': 'C'})
-
-# for faculty, (pullovers, color) in assignation.items():
-#     print(f'{faculty}: {pullovers} pullovers colour {color}')

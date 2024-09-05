@@ -22,7 +22,7 @@ class GenericInputData:
 
 class GenericBaseClass:
     def __init__(self) -> None:
-        self.data: list[GenericInputData] = []
+        self.data: "list[GenericInputData]" = []
 
     def update_value(self, index, new_value):
         self.data[index] = new_value
@@ -48,8 +48,8 @@ class ColorData(GenericBaseClass):
         self.data = ["", 0]
 
 
-colors_data_storage: list[ColorData] = []
-faculty_data_storage: list[FacultyData] = []
+colors_data_storage: "list[ColorData]" = []
+faculty_data_storage: "list[FacultyData]" = []
 
 
 def main():
@@ -241,7 +241,7 @@ def main():
                 st.error(f"Error: {e}")
 
     st.button(
-        "Execute", on_click=lambda: bk_request(end_container), use_container_width=True
+        "Ejecutar", on_click=lambda: bk_request(end_container), use_container_width=True
     )
     end_container = st.container()
 
