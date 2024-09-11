@@ -27,6 +27,8 @@
   - [Modo de Uso.](#modo-de-uso)
     - [Maual de Usuario.](#maual-de-usuario)
   - [Bitácora del Proyecto.](#bitácora-del-proyecto)
+  - [Conclusiones](#conclusiones)
+  - [Referencias](#referencias)
 
 ## Introducción.
 
@@ -110,15 +112,15 @@ El algoritmo recibe los siguientes datos de entrada:
 
    * El algoritmo imprime la cantidad de pullovers asignados a cada facultad, junto con el color asignado. También proporciona un resumen de la distribución total por color.
 
-## [PuLP](https://pypi.org/project/PuLP/): Biblioteca de Optimización Lineal en Python.
+## [PuLP](https://pypi.org/project/PuLP/): Biblioteca de Optimización Lineal en Python. 
 
-`PuLP` es una biblioteca de código abierto para Python diseñada específicamente para modelar y resolver problemas de optimización lineal y entera. Proporciona una interfaz sencilla y flexible que permite a los usuarios definir variables de decisión, funciones objetivo y restricciones de manera intuitiva, utilizando una sintaxis similar al lenguaje matemático convencional.
+`PuLP` es una biblioteca de código abierto para Python diseñada específicamente para modelar y resolver problemas de optimización lineal y entera. Proporciona una interfaz sencilla y flexible que permite a los usuarios definir variables de decisión, funciones objetivo y restricciones de manera intuitiva, utilizando una sintaxis similar al lenguaje matemático convencional. 
 
 #### Características Principales.
    1. **Modelado Intuitivo**: `PuLP` facilita la formulación de problemas de optimización mediante la creación de variables, la definición de la función objetivo y la incorporación de restricciones de manera clara y estructurada.
    2. **Compatibilidad con Múltiples Solvers**: La biblioteca puede integrarse con diversos solvers de optimización, tanto de código abierto como comerciales, como `CBC`, `CPLEX`, `Gurobi` y `GLPK`, lo que brinda flexibilidad para elegir la herramienta más adecuada según las necesidades del problema.
    3. **Soporte para Optimización Entera y Lineal**: Además de resolver problemas de programación lineal, `PuLP` también permite manejar variables enteras, lo que es esencial para aplicaciones que requieren soluciones discretas.
-   4. **Documentación y Comunidad Activa**: `PuLP` cuenta con una amplia documentación y una comunidad activa que facilita el aprendizaje y la resolución de dudas, lo que la convierte en una opción accesible tanto para principiantes como para usuarios avanzados.
+   4. [**Documentación y Comunidad Activa**]: `PuLP` cuenta con una amplia documentación y una comunidad activa que facilita el aprendizaje y la resolución de dudas, lo que la convierte en una opción accesible tanto para principiantes como para usuarios avanzados. [1][2]
 
 
 ## Modo de Uso.
@@ -180,3 +182,19 @@ Por último en ese mismo menú, al entrar a `Print` se podrá obtener una versi�
 14. Consulta al cliente sobre posible cambio de tecnología al no encontrar solución al problema.
 15. Finalmente cambio de tecnología (streamlit) y de concepción de la apliación. Nuevo proceso de desarrollo e investigación de la nueva tecnología.
 16. Producto funcional. 
+
+
+## Conclusiones
+
+El estudio y resolución del problema de distribución de pullovers en los Juegos Caribe demuestra la aplicabilidad y eficacia de la Programación Lineal Entera Mixta (MILP) para abordar problemas de optimización complejos con restricciones múltiples. A lo largo del informe se destaca cómo MILP ofrece una ventaja significativa en comparación con métodos heurísticos y de búsqueda local, debido a su capacidad para garantizar soluciones óptimas y cumplir con todas las restricciones de forma rigurosa.
+
+El uso de MILP permitió gestionar de manera eficiente la asignación de pullovers a diferentes facultades, respetando las prioridades definidas y optimizando la distribución de acuerdo a las preferencias y limitaciones establecidas. Este enfoque no solo asegura la equidad en la asignación de recursos limitados, sino que también minimiza las diferencias en las proporciones de asignación, logrando un balance entre las facultades que participan en los juegos.
+
+Además, la implementación de la biblioteca PuLP en Python facilitó el modelado y la solución del problema, permitiendo un enfoque claro y estructurado para definir variables de decisión, restricciones y la función objetivo. PuLP resultó ser una herramienta versátil y accesible, proporcionando compatibilidad con múltiples solvers y flexibilidad en la integración de diversas restricciones del problema​.
+
+En conclusión, la solución presentada no solo es robusta desde el punto de vista matemático y computacional, sino que también es práctica y escalable, lo que la convierte en una opción adecuada para problemas similares de asignación de recursos en eventos deportivos u otros contextos de logística compleja.
+
+## Referencias
+
+1. COIN-OR Foundation. (n.d.). *PuLP: A Python linear programming API*. Recuperado de https://coin-or.github.io/pulp/
+2. Python Package Index (PyPI). (n.d.). *PuLP: A Python linear programming API*. Recuperado de https://pypi.org/project/PuLP/
