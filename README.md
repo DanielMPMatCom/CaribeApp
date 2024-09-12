@@ -22,6 +22,7 @@
   - [Metodología y Formulación del Problema de Optimización.](#metodología-y-formulación-del-problema-de-optimización)
       - [Datos de Entrada.](#datos-de-entrada)
       - [Pasos del Algoritmo.](#pasos-del-algoritmo)
+      - [Formulación matemática](#formulación-matemática)
   - [PuLP: Biblioteca de Optimización Lineal en Python.](#pulp-biblioteca-de-optimización-lineal-en-python)
       - [Características Principales.](#características-principales)
   - [Modo de Uso.](#modo-de-uso)
@@ -90,27 +91,51 @@ El algoritmo recibe los siguientes datos de entrada:
      $diferencia_i$ : Diferencia absoluta entre la proporción asignada y la media.
    * Restricciones:
 
-     - La suma total de pullovers asignados debe ser igual al total disponible.
-     - Cada facultad recibe exactamente un color.
-     - Ninguna facultad recibe más pullovers de los que hay disponibles de un color.
-     - Ninguna facultad se queda con $0$ colores.
-     - La proporción de pullovers asignados a cada facultad debe acercarse lo más posible a la media.
+     - La suma total de pullovers asignados debe ser igual al total disponible. [(1)](#restriccion-1)
+     - Cada facultad recibe exactamente un color. [(2)](#restriccion-2)
+     - Ninguna facultad recibe más pullovers de los que hay disponibles de un color. [(3)](#restriccion-3)
+     - Ninguna facultad se queda con $0$ pullovers. [(4)](#restriccion-4)
    * Otras restricciones en orden de prioridad (El algoritmo tratará de cumplir la mayor cantidad de restricciones respentando la prioridad asignada):
 
-     1. La cantidad de pullovers que recibe una facultad es menor o igual a la cantidad de atletas inscritos en dicha facultad.
-     2. Una facultad no tendrá menos pullovers que otra que esté por debajo de ella en el ranking actual de los juegos.
-     3. Si una facultad tiene menos de 10 atletas inscritos, recibe todos los pullovers para sus atletas.
-     4. Si $A$ es una facultad que tiene más atletas inscritos que otra facultad $B$, entonces $A$ recibe más pullovers que $B$.
-     5. Si a una facultad $A$ se le van a asignar $n$ pullovers, y existen al menos $n$ pullovers disponibles del color favorito de $A$, se le deben asignar dichos pullovers a $A$.
+     1. La cantidad de pullovers que recibe una facultad es menor o igual a la cantidad de atletas inscritos en dicha facultad. [(5)](#restriccion-5)
+     2. Una facultad no tendrá menos pullovers que otra que esté por debajo de ella en el ranking actual de los juegos. [(6)](#restriccion-6)
+     3. Si una facultad tiene menos de 10 atletas inscritos, recibe todos los pullovers para sus atletas. [(7)](#restriccion-7)
+     4. Si $A$ es una facultad que tiene más atletas inscritos que otra facultad $B$, entonces $A$ recibe más pullovers que $B$. [(8)](#restriccion-8)
+     5. Si a una facultad $A$ se le van a asignar $n$ pullovers, y existen al menos $n$ pullovers disponibles del color favorito de $A$, se le deben asignar dichos pullovers a $A$. [(9)](#restriccion-9)
    * Función Objetivo:
 
-     - Minimizar la suma de las diferencias absolutas entre la proporción de pullovers asignados y la media.
+     - Minimizar la suma de las diferencias absolutas entre la proporción de pullovers asignados y la media. [(10)](#funcionobjetivo)
 4. Resolución:
 
    * El problema de optimización se resuelve utilizando el solver `PuLP` con un límite de tiempo para garantizar la eficiencia en la solución.
 5. Salida:
 
    * El algoritmo imprime la cantidad de pullovers asignados a cada facultad, junto con el color asignado. También proporciona un resumen de la distribución total por color.
+
+#### Formulación matemática
+- Restricciones:
+  * <a id="restriccion-1"></a> **(1)** $\sum_{i \in \text{facultades}}x_i = T$ donde $T$ es el total de pullovers. 
+  * <a id="restriccion-2"></a> **(2)** $\sum_{j \in \text{colores}} y_{i,j} = 1$
+  * <a id="restriccion-3"></a> **(3)** Si $(y_{i,j} = 1)$ (es decir, la facultad $i$ recibe el color $j$) $\rightarrow x_i \leq \text{pulóveres\_disponibles}_j$
+  * <a id="restriccion-3"></a> **(3)** $\sum_{i \in \text{facultades}} z_{i,j} \leq \text{pulóveres\_disponibles}_j$
+  * <a id="restriccion-4"></a> **(4)** $x_i \geq 10$ para todo $i$
+  * <a id="restriccion-5"></a> **(5)** $x_i \leq \text{atletas}_i \quad \text{(si hay datos de atletas para } i \text{)}$
+  * <a id="restriccion-6"></a> **(6)** $x_a \geq x_b \quad \text{si el ranking de } a \text{ es mejor que el de } b$
+  * <a id="restriccion-7"></a> **(7)** $x_i = \text{atletas}_i \quad \text{si la facultad } i \text{tiene menos de 10 atletas}$
+  * <a id="restriccion-8"></a> **(8)** $x_a \geq x_b \quad \text{si } \text{atletas}_a > \text{atletas}_b$
+  * <a id="restriccion-9"></a> **(9)** $y_{i, \text{color\_preferido}} = 1$
+- Relación entre $z_{i,j}, x_i $ y $ y_{i,j}$. Para cada facultad $i$ y color $j$:
+  * $z_{i,j} \leq x_i$
+  * $z_{i,j} \leq y_{i,j} \times \text{total}$
+  * $z_{i,j} \geq x_i - (1 - y_{i,j}) \times \text{total}$
+- Proporciones de atletas. Se define una proporción promedio:
+  * $\text{proporciones\_media} = \frac{\text{total}}{\sum_{k \in \text{atletas}} \text{atletas}_k}$
+  * $\text{proporciones}_i \times \text{atletas}_i = x_i$ para cada facultad $i$ que tiene datos de atletas
+  * La diferencia absoluta entre la proporción de la facultad $i$ y la proporción media es: 
+    * $ \text{diferencia}_i \geq \text{proporciones}_i - \text{proporciones\_media}$
+    * $\text{diferencia}_i \geq \text{proporciones\_media} - \text{proporciones}_i $
+- Función Objetivo: Minimizar la suma de diferencias absolutas
+  <a id="funcionobjetivo"></a> **(10)** $mín \left(\sum_{i \in \text{facultades}} \text{diferencia}_i\right)$
 
 ## [PuLP](https://pypi.org/project/PuLP/): Biblioteca de Optimización Lineal en Python. 
 

@@ -85,7 +85,7 @@ def PuLP_Solver(
             if y[i, j]:
                 prob += x[i] <= available_pullovers[j]
 
-    # Constraint: each faculty must receive at least 1 pullover
+    # Constraint: each faculty must receive at least 10 pullovers if they have 10 or more athletes
     for i in remaining_faculties:
         prob += x[i] >= 10
 
