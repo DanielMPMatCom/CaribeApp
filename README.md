@@ -116,7 +116,7 @@ El algoritmo recibe los siguientes datos de entrada:
 - Restricciones:
   * <a id="restriccion-1"></a> **(1)** $\sum_{i \in \text{facultades}}x_i = T$ donde $T$ es el total de pullovers. 
   * <a id="restriccion-2"></a> **(2)** $\sum_{j \in \text{colores}} y_{i,j} = 1$
-  * <a id="restriccion-3"></a> **(3)** Si $(y_{i,j} = 1)$ (es decir, la facultad $i$ recibe el color $j$) $\rightarrow x_i \leq \text{pulóveres\_disponibles}_j$
+  * <a id="restriccion-3"></a> **(3)** $\text{Si } y_{i,j} = 1 \text{(es decir, la facultad } i \text{ recibe el color } j\text{)} \rightarrow x_i \leq \text{pulóveres\_disponibles}_j$
   * <a id="restriccion-3"></a> **(3)** $\sum_{i \in \text{facultades}} z_{i,j} \leq \text{pulóveres\_disponibles}_j$
   * <a id="restriccion-4"></a> **(4)** $x_i \geq 10$ para todo $i$
   * <a id="restriccion-5"></a> **(5)** $x_i \leq \text{atletas}_i \quad \text{(si hay datos de atletas para } i \text{)}$
