@@ -116,26 +116,26 @@ El algoritmo recibe los siguientes datos de entrada:
 - Restricciones:
   * <a id="restriccion-1"></a> **(1)** $\sum_{i \in \text{facultades}}x_i = T$ donde $T$ es el total de pullovers. 
   * <a id="restriccion-2"></a> **(2)** $\sum_{j \in \text{colores}} y_{i,j} = 1$
-  * <a id="restriccion-3"></a> **(3)** $\text{Si } y_{i,j} = 1 \text{(es decir, la facultad } i \text{ recibe el color } j\text{)} \rightarrow x_i \leq \text{pulóveres\_disponibles}_j$
-  * <a id="restriccion-3"></a> **(3)** $\sum_{i \in \text{facultades}} z_{i,j} \leq \text{pulóveres\_disponibles}_j$
+  * <a id="restriccion-3"></a> **(3)** $\text{Si } y_{i,j} = 1 \text{(es decir, la facultad } i \text{ recibe el color } j\text{)} \rightarrow x_i \leq \text{pulóveresDisponibles}_j$
+  * <a id="restriccion-3"></a> **(3)** $\sum_{i \in \text{facultades}} z_{i,j} \leq \text{pulóveresDisponibles}_j$
   * <a id="restriccion-4"></a> **(4)** $x_i \geq 10$ para todo $i$
   * <a id="restriccion-5"></a> **(5)** $x_i \leq \text{atletas}_i \quad \text{(si hay datos de atletas para } i \text{)}$
   * <a id="restriccion-6"></a> **(6)** $x_a \geq x_b \quad \text{si el ranking de } a \text{ es mejor que el de } b$
   * <a id="restriccion-7"></a> **(7)** $x_i = \text{atletas}_i \quad \text{si la facultad } i \text{tiene menos de 10 atletas}$
   * <a id="restriccion-8"></a> **(8)** $x_a \geq x_b \quad \text{si } \text{atletas}_a > \text{atletas}_b$
-  * <a id="restriccion-9"></a> **(9)** $y_{i, \text{color\_preferido}} = 1$
+  * <a id="restriccion-9"></a> **(9)** $y_{i, \text{colorPreferido}} = 1$
 - Relación entre $z_{i,j}, x_i $ y $ y_{i,j}$. Para cada facultad $i$ y color $j$:
   * $z_{i,j} \leq x_i$
   * $z_{i,j} \leq y_{i,j} \times \text{total}$
   * $z_{i,j} \geq x_i - (1 - y_{i,j}) \times \text{total}$
 - Proporciones de atletas. Se define una proporción promedio:
-  * $\text{proporciones\_media} = \frac{\text{total}}{\sum_{k \in \text{atletas}} \text{atletas}_k}$
+  * $\text{proporcionesMedia} = \frac{\text{total}}{\sum_{k \in \text{atletas}} \text{atletas}_k}$
   * $\text{proporciones}_i \times \text{atletas}_i = x_i$ para cada facultad $i$ que tiene datos de atletas
   * La diferencia absoluta entre la proporción de la facultad $i$ y la proporción media es: 
-    * $ \text{diferencia}_i \geq \text{proporciones}_i - \text{proporciones\_media}$
-    * $\text{diferencia}_i \geq \text{proporciones\_media} - \text{proporciones}_i $
+    * $ \text{diferencia}_i \geq \text{proporciones}_i - \text{proporcionesMedia}$
+    * $\text{diferencia}_i \geq \text{proporcionesMedia} - \text{proporciones}_i $
 - Función Objetivo: Minimizar la suma de diferencias absolutas
-  <a id="funcionobjetivo"></a> **(10)** $mín \left(\sum_{i \in \text{facultades}} \text{diferencia}_i\right)$
+  * <a id="funcionobjetivo"></a> **(10)** $mín \left(\sum_{i \in \text{facultades}} \text{diferencia}_i\right)$
 
 ## [PuLP](https://pypi.org/project/PuLP/): Biblioteca de Optimización Lineal en Python. 
 
