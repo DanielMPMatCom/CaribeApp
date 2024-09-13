@@ -121,7 +121,7 @@ El algoritmo recibe los siguientes datos de entrada:
   * <a id="restriccion-4"></a> **(4)** $x_i \geq 10$ para todo $i$
   * <a id="restriccion-5"></a> **(5)** $x_i \leq \text{atletas}_i \quad \text{(si hay datos de atletas para } i \text{)}$
   * <a id="restriccion-6"></a> **(6)** $x_a \geq x_b \quad \text{si el ranking de } a \text{ es mejor que el de } b$
-  * <a id="restriccion-7"></a> **(7)** $x_i = \text{atletas}_i \quad \text{si la facultad } i \text{tiene menos de 10 atletas}$
+  * <a id="restriccion-7"></a> **(7)** $x_i = \text{atletas}_i \quad \text{si la facultad } i \text{ tiene menos de 10 atletas}$
   * <a id="restriccion-8"></a> **(8)** $x_a \geq x_b \quad \text{si } \text{atletas}_a > \text{atletas}_b$
   * <a id="restriccion-9"></a> **(9)** $y_{i, \text{colorPreferido}} = 1$
 - Relación entre $z_{i,j}, x_i $ y $ y_{i,j}$. Para cada facultad $i$ y color $j$:
