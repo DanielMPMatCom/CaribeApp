@@ -16,13 +16,19 @@ def PuLP_Solver(
     athletes,
     ranking,
     available_pullovers,
-    pullovers_for_referees_and_teachers,
+    pullovers_for_referees,
+    pullovers_for_teachers,
     pullovers_for_aaac,
     preferences={},
 ):
     colors = [color for color in available_pullovers.keys()]
+
+        
     total_pullovers = sum(amount for amount in available_pullovers.values())
 
+    if(len(faculties) > total_pullovers):
+        raise ValueError("No hay suficientes pullovers para repartir a todas las facultades")
+    
     new_total = total_pullovers
 
     assigned_pullovers = {}
@@ -31,8 +37,13 @@ def PuLP_Solver(
     for group in ["Árbitros", "Profesores", "AAAC"]:
         if group == "AAAC":
             amount = pullovers_for_aaac
-        else:
-            amount = pullovers_for_referees_and_teachers // 2
+        elif group == "Pofesores":
+            amount = pullovers_for_teachers
+        else: 
+            amount = pullovers_for_referees
+        
+        if amount == 0:
+            continue
 
         available = [color for color in available_pullovers if available_pullovers[color] >= amount]
         
@@ -174,7 +185,7 @@ def PuLP_Solver(
     prob += pulp.lpSum(difference[i] for i in remaining_faculties if i in athletes)
 
     # Solve the final problem
-    prob.solve(pulp.PULP_CBC_CMD(timeLimit=30))
+    prob.solve(pulp.PULP_CBC_CMD(timeLimit=30, msg=False))
 
     # Update available pullovers after the assignment
     for i in remaining_faculties:
@@ -186,5 +197,34 @@ def PuLP_Solver(
                 available_pullovers[j] -= assigned_amount
                 break
         assigned_pullovers[i] = (assigned_amount, assigned_color)
+
+    
+
+    remaining_pullovers = {}
+    for color in colors:
+        remaining_pullovers.update({color: 0})
+
+    assigned_pullovers = dict(sorted(
+    assigned_pullovers.items(),
+    key=lambda item: (item[0] not in ranking, ranking.get(item[0], float('inf')))
+    ))
+
+
+    for item in assigned_pullovers:
+        if item in athletes:
+            if athletes[item] < assigned_pullovers[item][0]:
+                remaining_pullovers[assigned_pullovers[item][1]] += (assigned_pullovers[item][0] - athletes[item])
+                assigned_pullovers[item] = (athletes[item], assigned_pullovers[item][1])
+            elif athletes[item] > assigned_pullovers[item][0]:
+                if remaining_pullovers[assigned_pullovers[item][1]]:
+                    aditional_pullovers = min(remaining_pullovers[assigned_pullovers[item][1]], athletes[item] - assigned_pullovers[item][0])
+                    remaining_pullovers[assigned_pullovers[item][1]] -= aditional_pullovers
+                    athletes[item] += aditional_pullovers
+
+
+    print("\nPullovers Restantes de cada Color: ")
+    for color in remaining_pullovers:
+        print(f"{remaining_pullovers[color]} pullovers de color {color}")
+    print("\n")
 
     return assigned_pullovers

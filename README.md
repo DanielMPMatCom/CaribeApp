@@ -28,6 +28,7 @@
   - [Modo de Uso.](#modo-de-uso)
     - [Maual de Usuario.](#maual-de-usuario)
   - [Bitácora del Proyecto.](#bitácora-del-proyecto)
+  - [Reporte Técnico. Tiempo computacional](#reporte-técnico-tiempo-computacional)
   - [Conclusiones](#conclusiones)
   - [Referencias](#referencias)
 
@@ -113,17 +114,18 @@ El algoritmo recibe los siguientes datos de entrada:
    * El algoritmo imprime la cantidad de pullovers asignados a cada facultad, junto con el color asignado. También proporciona un resumen de la distribución total por color.
 
 #### Formulación matemática
+
 - Restricciones:
-  * <a id="restriccion-1"></a> **(1)** $\sum_{i \in \text{facultades}}x_i = T$ donde $T$ es el total de pullovers. 
-  * <a id="restriccion-2"></a> **(2)** $\sum_{j \in \text{colores}} y_{i,j} = 1$
-  * <a id="restriccion-3"></a> **(3)** $\text{Si } y_{i,j} = 1 \text{(es decir, la facultad } i \text{ recibe el color } j\text{)} \rightarrow x_i \leq \text{pulóveresDisponibles}_j$
-  * <a id="restriccion-3"></a> **(3)** $\sum_{i \in \text{facultades}} z_{i,j} \leq \text{pulóveresDisponibles}_j$
-  * <a id="restriccion-4"></a> **(4)** $x_i \geq 10$ para todo $i$
-  * <a id="restriccion-5"></a> **(5)** $x_i \leq \text{atletas}_i \quad \text{(si hay datos de atletas para } i \text{)}$
-  * <a id="restriccion-6"></a> **(6)** $x_a \geq x_b \quad \text{si el ranking de } a \text{ es mejor que el de } b$
-  * <a id="restriccion-7"></a> **(7)** $x_i = \text{atletas}_i \quad \text{si la facultad } i \text{ tiene menos de 10 atletas}$
-  * <a id="restriccion-8"></a> **(8)** $x_a \geq x_b \quad \text{si } \text{atletas}_a > \text{atletas}_b$
-  * <a id="restriccion-9"></a> **(9)** $y_{i, \text{colorPreferido}} = 1$
+  * `<a id="restriccion-1"></a>` **(1)** $\sum_{i \in \text{facultades}}x_i = T$ donde $T$ es el total de pullovers.
+  * `<a id="restriccion-2"></a>` **(2)** $\sum_{j \in \text{colores}} y_{i,j} = 1$
+  * `<a id="restriccion-3"></a>` **(3)** $\text{Si } y_{i,j} = 1 \text{(es decir, la facultad } i \text{ recibe el color } j\text{)} \rightarrow x_i \leq \text{pulóveresDisponibles}_j$
+  * `<a id="restriccion-3"></a>` **(3)** $\sum_{i \in \text{facultades}} z_{i,j} \leq \text{pulóveresDisponibles}_j$
+  * `<a id="restriccion-4"></a>` **(4)** $x_i \geq 10$ para todo $i$
+  * `<a id="restriccion-5"></a>` **(5)** $x_i \leq \text{atletas}_i \quad \text{(si hay datos de atletas para } i \text{)}$
+  * `<a id="restriccion-6"></a>` **(6)** $x_a \geq x_b \quad \text{si el ranking de } a \text{ es mejor que el de } b$
+  * `<a id="restriccion-7"></a>` **(7)** $x_i = \text{atletas}_i \quad \text{si la facultad } i \text{ tiene menos de 10 atletas}$
+  * `<a id="restriccion-8"></a>` **(8)** $x_a \geq x_b \quad \text{si } \text{atletas}_a > \text{atletas}_b$
+  * `<a id="restriccion-9"></a>` **(9)** $y_{i, \text{colorPreferido}} = 1$
 - Relación entre $z_{i,j}, x_i $ y $ y_{i,j}$. Para cada facultad $i$ y color $j$:
   * $z_{i,j} \leq x_i$
   * $z_{i,j} \leq y_{i,j} \times \text{total}$
@@ -131,22 +133,22 @@ El algoritmo recibe los siguientes datos de entrada:
 - Proporciones de atletas. Se define una proporción promedio:
   * $\text{proporcionesMedia} = \frac{\text{total}}{\sum_{k \in \text{atletas}} \text{atletas}_k}$
   * $\text{proporciones}_i \times \text{atletas}_i = x_i$ para cada facultad $i$ que tiene datos de atletas
-  * La diferencia absoluta entre la proporción de la facultad $i$ y la proporción media es: 
+  * La diferencia absoluta entre la proporción de la facultad $i$ y la proporción media es:
     * $ \text{diferencia}_i \geq \text{proporciones}_i - \text{proporcionesMedia}$
     * $\text{diferencia}_i \geq \text{proporcionesMedia} - \text{proporciones}_i $
 - Función Objetivo: Minimizar la suma de diferencias absolutas
-  * <a id="funcionobjetivo"></a> **(10)** $mín \left(\sum_{i \in \text{facultades}} \text{diferencia}_i\right)$
+  * `<a id="funcionobjetivo"></a>` **(10)** $mín \left(\sum_{i \in \text{facultades}} \text{diferencia}_i\right)$
 
-## [PuLP](https://pypi.org/project/PuLP/): Biblioteca de Optimización Lineal en Python. 
+## [PuLP](https://pypi.org/project/PuLP/): Biblioteca de Optimización Lineal en Python.
 
-`PuLP` es una biblioteca de código abierto para Python diseñada específicamente para modelar y resolver problemas de optimización lineal y entera. Proporciona una interfaz sencilla y flexible que permite a los usuarios definir variables de decisión, funciones objetivo y restricciones de manera intuitiva, utilizando una sintaxis similar al lenguaje matemático convencional. 
+`PuLP` es una biblioteca de código abierto para Python diseñada específicamente para modelar y resolver problemas de optimización lineal y entera. Proporciona una interfaz sencilla y flexible que permite a los usuarios definir variables de decisión, funciones objetivo y restricciones de manera intuitiva, utilizando una sintaxis similar al lenguaje matemático convencional.
 
 #### Características Principales.
-   1. **Modelado Intuitivo**: `PuLP` facilita la formulación de problemas de optimización mediante la creación de variables, la definición de la función objetivo y la incorporación de restricciones de manera clara y estructurada.
-   2. **Compatibilidad con Múltiples Solvers**: La biblioteca puede integrarse con diversos solvers de optimización, tanto de código abierto como comerciales, como `CBC`, `CPLEX`, `Gurobi` y `GLPK`, lo que brinda flexibilidad para elegir la herramienta más adecuada según las necesidades del problema.
-   3. **Soporte para Optimización Entera y Lineal**: Además de resolver problemas de programación lineal, `PuLP` también permite manejar variables enteras, lo que es esencial para aplicaciones que requieren soluciones discretas.
-   4. [**Documentación y Comunidad Activa**]: `PuLP` cuenta con una amplia documentación y una comunidad activa que facilita el aprendizaje y la resolución de dudas, lo que la convierte en una opción accesible tanto para principiantes como para usuarios avanzados. [1][2]
 
+1. **Modelado Intuitivo**: `PuLP` facilita la formulación de problemas de optimización mediante la creación de variables, la definición de la función objetivo y la incorporación de restricciones de manera clara y estructurada.
+2. **Compatibilidad con Múltiples Solvers**: La biblioteca puede integrarse con diversos solvers de optimización, tanto de código abierto como comerciales, como `CBC`, `CPLEX`, `Gurobi` y `GLPK`, lo que brinda flexibilidad para elegir la herramienta más adecuada según las necesidades del problema.
+3. **Soporte para Optimización Entera y Lineal**: Además de resolver problemas de programación lineal, `PuLP` también permite manejar variables enteras, lo que es esencial para aplicaciones que requieren soluciones discretas.
+4. [**Documentación y Comunidad Activa**]: `PuLP` cuenta con una amplia documentación y una comunidad activa que facilita el aprendizaje y la resolución de dudas, lo que la convierte en una opción accesible tanto para principiantes como para usuarios avanzados. [1][2]
 
 ## Modo de Uso.
 
@@ -154,7 +156,7 @@ El algoritmo recibe los siguientes datos de entrada:
 
 Para correr la aplicación se puede ejecutar el siguiente código desde una terminal en la carpeta raíz del repositorio:
 
-```streamlit run src/main.py```
+``streamlit run src/main.py``
 
 ### Maual de Usuario.
 
@@ -171,9 +173,9 @@ Primeramente se introducen los datos relacionados a las cantidades de pullovers 
 De manera similar se selecciona la cantidad de facultades a las que se les va a repartir pullovers y se rellenan los datos pertinentes. La aplicación le avisará si le faltan datos por brindar al ejecutar la solución. Se recomienda siempre rellenar el dato de la Cantidad de Atletas, y en el caso de no tener la exactitud del dato, brindar un aproximado basado en años anteriores para que la solución sea lo mejor posible.
 
 ![Execution](images/04execution.png)
-![Execution](images/05execution2.png) 
+![Execution](images/05execution2.png)
 
-Al completar los datos necesarios, se puede pulsar el botón `Ejecutar`. Se tomará un tiempo relativamente corto e imprimirá los resultados.
+Al completar los datos necesarios, se puede pulsar el botón `Ejecutar`. Luego imprimirá los resultados.
 
 ![Settings](images/06settings.png)
 
@@ -206,7 +208,21 @@ Por último en ese mismo menú, al entrar a `Print` se podrá obtener una versi�
 13. Problemas con los paquetes de python al integrar ambas partes (Permisos de la app al ser ejecutada en android debido al uso de la consola). Nueva incopatibilidad de las tecnologías. Búsqueda de posibles soluciones.
 14. Consulta al cliente sobre posible cambio de tecnología al no encontrar solución al problema.
 15. Finalmente cambio de tecnología (streamlit) y de concepción de la apliación. Nuevo proceso de desarrollo e investigación de la nueva tecnología.
-16. Producto funcional. 
+16. Producto funcional.
+17. Presentación al cliente. Solicitud de incorporación de funcionalidades.
+
+## Reporte Técnico. Tiempo computacional
+
+Para garantizar una solución en un tiempo razonable para datos de entrada muy grandes se decidió establecer un tiempo límite de 30 segundos. La biblioteca `PuLP` tiene la facilidad de incorporar ese tiempo límite y ofrecer la mejor solución encontrada hasta alcanzarlo. En las pruebas del producto se llegó a la conclusión de que el sover mostraba un buen rendimiento para conjuntos de datos del tamaño máximo esperado en el ambiente de los Juegos Caribe (18 facultades que reciben pullovers). A continuación una muestra de los tiempos alcanzados para distintos tamaños de entrada de datos:
+
+| Facultades | Colores  | Pullovers  | Tiempo (s) |
+|------------|----------|------------|------------|
+| 2          | 2        | 100        | 0.070997   |
+| 4          | 2        | 250        | 0.328346   |
+| 7          | 3        | 350        | 1.620945   |
+| 11         | 3        | 600        | 7.829477   |
+| 16         | 4        | 1350       | 30.328623  |
+
 
 
 ## Conclusiones
@@ -215,7 +231,7 @@ El estudio y resolución del problema de distribución de pullovers en los Juego
 
 El uso de MILP permitió gestionar de manera eficiente la asignación de pullovers a diferentes facultades, respetando las prioridades definidas y optimizando la distribución de acuerdo a las preferencias y limitaciones establecidas. Este enfoque no solo asegura la equidad en la asignación de recursos limitados, sino que también minimiza las diferencias en las proporciones de asignación, logrando un balance entre las facultades que participan en los juegos.
 
-Además, la implementación de la biblioteca PuLP en Python facilitó el modelado y la solución del problema, permitiendo un enfoque claro y estructurado para definir variables de decisión, restricciones y la función objetivo. PuLP resultó ser una herramienta versátil y accesible, proporcionando compatibilidad con múltiples solvers y flexibilidad en la integración de diversas restricciones del problema​.
+Además, la implementación de la biblioteca PuLP en Python facilitó el modelado y la solución del problema, permitiendo un enfoque claro y estructurado para definir variables de decisión, restricciones y la función objetivo. PuLP resultó ser una herramienta versátil y accesible, proporcionando compatibilidad con múltiples solvers y flexibilidad en la integración de diversas restricciones del problema.
 
 En conclusión, la solución presentada no solo es robusta desde el punto de vista matemático y computacional, sino que también es práctica y escalable, lo que la convierte en una opción adecuada para problemas similares de asignación de recursos en eventos deportivos u otros contextos de logística compleja.
 
