@@ -164,7 +164,7 @@ def main():
 
     ``streamlit run src/main.py``
 
-    ### Maual de Usuario.
+    ### Manual de Usuario.
 
     ![Main Screen Dark](images/01main_screen_dark.png)
 
@@ -249,37 +249,6 @@ def main():
     """,
         unsafe_allow_html=True,
     )
-
-    # ![Main Screen Dark](images/01main_screen_dark.png)
-
-    # Pantalla principal de la aplicación
-
-    # ![Introducing Colors Data](images/02introducing_data.png)
-
-    # Primeramente se introducen los datos relacionados a las cantidades de pullovers fijas para Árbitros, Profesores y Antiguos Atletas. Luego se selecciona la cantidad de colores moviendo el slider con el mouse o con las flechas del teclado. Se introducen los nombres y la cantidad de pullovers disponibles de cada color.
-
-    # ![Introducing Faculties Data](images/03introducing_data2.png)
-
-    # De manera similar se selecciona la cantidad de facultades a las que se les va a repartir pullovers y se rellenan los datos pertinentes. La aplicación le avisará si le faltan datos por brindar al ejecutar la solución. Se recomienda siempre rellenar el dato de la Cantidad de Atletas, y en el caso de no tener la exactitud del dato, brindar un aproximado basado en años anteriores para que la solución sea lo mejor posible.
-
-    # ![Execution](images/04execution.png)
-    # ![Execution](images/05execution2.png)
-
-    # Al completar los datos necesarios, se puede pulsar el botón `Ejecutar`. Luego imprimirá los resultados.
-
-    # ![Settings](images/06settings.png)
-
-    # En la esquina superior derecha se podrá encontrar un menú desplegable.
-
-    # ![Change Theme](images/07change_theme.png)
-
-    # Una de las opciones disponibles al entrar a `Settings` es la de cambiar el Tema de la aplicación.
-
-    # ![Light Theme](images/08main_screen_light.png)
-
-    # ![Print Screen](images/09print_screen.png)
-
-    # Por último en ese mismo menú, al entrar a `Print` se podrá obtener una versión en `PDF` de la ejecución de la aplicación, pudiendo guardar de esta manera los resultados y los datos de entrada que los generaron.
 
 
 if __name__ == "__main__":
