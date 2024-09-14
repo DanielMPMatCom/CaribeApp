@@ -524,7 +524,7 @@ def main():
                 )
 
     st.chat_input(
-        placeholder="Introduce tu @ de telegram, y habla con el indio https://t.me/el_indio_de_los_caribe_bot",
+        placeholder="https://t.me/el_indio_de_los_caribe_bot",
         key="user_telegram",
         on_submit=lambda: indio_attack(container=end_container),
         # disabled=(st.session_state.get("solution_for_request", None) == None),
