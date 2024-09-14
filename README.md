@@ -116,16 +116,16 @@ El algoritmo recibe los siguientes datos de entrada:
 #### Formulación matemática
 
 - Restricciones:
-  * `<a id="restriccion-1"></a>` **(1)** $\sum_{i \in \text{facultades}}x_i = T$ donde $T$ es el total de pullovers.
-  * `<a id="restriccion-2"></a>` **(2)** $\sum_{j \in \text{colores}} y_{i,j} = 1$
-  * `<a id="restriccion-3"></a>` **(3)** $\text{Si } y_{i,j} = 1 \text{(es decir, la facultad } i \text{ recibe el color } j\text{)} \rightarrow x_i \leq \text{pulóveresDisponibles}_j$
-  * `<a id="restriccion-3"></a>` **(3)** $\sum_{i \in \text{facultades}} z_{i,j} \leq \text{pulóveresDisponibles}_j$
-  * `<a id="restriccion-4"></a>` **(4)** $x_i \geq 10$ para todo $i$
-  * `<a id="restriccion-5"></a>` **(5)** $x_i \leq \text{atletas}_i \quad \text{(si hay datos de atletas para } i \text{)}$
-  * `<a id="restriccion-6"></a>` **(6)** $x_a \geq x_b \quad \text{si el ranking de } a \text{ es mejor que el de } b$
-  * `<a id="restriccion-7"></a>` **(7)** $x_i = \text{atletas}_i \quad \text{si la facultad } i \text{ tiene menos de 10 atletas}$
-  * `<a id="restriccion-8"></a>` **(8)** $x_a \geq x_b \quad \text{si } \text{atletas}_a > \text{atletas}_b$
-  * `<a id="restriccion-9"></a>` **(9)** $y_{i, \text{colorPreferido}} = 1$
+  * <a id="restriccion-1"></a> **(1)** $\sum_{i \in \text{facultades}}x_i = T$ donde $T$ es el total de pullovers.
+  * <a id="restriccion-2"></a> **(2)** $\sum_{j \in \text{colores}} y_{i,j} = 1$
+  * <a id="restriccion-3"></a> **(3)** $\text{Si } y_{i,j} = 1 \text{(es decir, la facultad } i \text{ recibe el color } j\text{)} \rightarrow x_i \leq \text{pulóveresDisponibles}_j$
+  * <a id="restriccion-3"></a> **(3)** $\sum_{i \in \text{facultades}} z_{i,j} \leq \text{pulóveresDisponibles}_j$
+  * <a id="restriccion-4"></a> **(4)** $x_i \geq 10$ para todo $i$
+  * <a id="restriccion-5"></a> **(5)** $x_i \leq \text{atletas}_i \quad \text{(si hay datos de atletas para } i \text{)}$
+  * <a id="restriccion-6"></a> **(6)** $x_a \geq x_b \quad \text{si el ranking de } a \text{ es mejor que el de } b$
+  * <a id="restriccion-7"></a> **(7)** $x_i = \text{atletas}_i \quad \text{si la facultad } i \text{ tiene menos de 10 atletas}$
+  * <a id="restriccion-8"></a> **(8)** $x_a \geq x_b \quad \text{si } \text{atletas}_a > \text{atletas}_b$
+  * <a id="restriccion-9"></a> **(9)** $y_{i, \text{colorPreferido}} = 1$
 - Relación entre $z_{i,j}, x_i $ y $ y_{i,j}$. Para cada facultad $i$ y color $j$:
   * $z_{i,j} \leq x_i$
   * $z_{i,j} \leq y_{i,j} \times \text{total}$
@@ -137,7 +137,7 @@ El algoritmo recibe los siguientes datos de entrada:
     * $ \text{diferencia}_i \geq \text{proporciones}_i - \text{proporcionesMedia}$
     * $\text{diferencia}_i \geq \text{proporcionesMedia} - \text{proporciones}_i $
 - Función Objetivo: Minimizar la suma de diferencias absolutas
-  * `<a id="funcionobjetivo"></a>` **(10)** $mín \left(\sum_{i \in \text{facultades}} \text{diferencia}_i\right)$
+  * <a id="funcionobjetivo"></a> **(10)** $mín \left(\sum_{i \in \text{facultades}} \text{diferencia}_i\right)$
 
 ## [PuLP](https://pypi.org/project/PuLP/): Biblioteca de Optimización Lineal en Python.
 
@@ -205,9 +205,9 @@ Por último en ese mismo menú, al entrar a `Print` se podrá obtener una versi�
 10. Consultas al cliente sobre los requerimientos y la prioridad de las restricciones del problema. Cambio de tecnología en el desarrollo de la aplicación por incompatibilidad con paquetes de python (Flutter a Flet).
 11. Modificaciones al código y aproximación a la solución definitiva. En paralelo continúa el desarrollo de la aplicación con la nueva tecnología.
 12. Encontrada solución al problema, arreglando detalles. Aplicación casi terminada.
-13. Problemas con los paquetes de python al integrar ambas partes (Permisos de la app al ser ejecutada en android debido al uso de la consola). Nueva incopatibilidad de las tecnologías. Búsqueda de posibles soluciones.
+13. Problemas con los paquetes de python al integrar ambas partes (Permisos de la app al ser ejecutada en android debido al uso de la consola). Nueva incompatibilidad de las tecnologías. Búsqueda de posibles soluciones.
 14. Consulta al cliente sobre posible cambio de tecnología al no encontrar solución al problema.
-15. Finalmente cambio de tecnología (streamlit) y de concepción de la apliación. Nuevo proceso de desarrollo e investigación de la nueva tecnología.
+15. Finalmente cambio de tecnología (streamlit) y de concepción de la aplicación. Nuevo proceso de desarrollo e investigación de la nueva tecnología.
 16. Producto funcional.
 17. Presentación al cliente. Solicitud de incorporación de funcionalidades.
 
