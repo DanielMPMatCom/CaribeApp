@@ -461,15 +461,15 @@ def main():
     with st.container():
         try:
             message0, message1 = st.session_state.get("solution_for_request", ({}, {}))
-            
+
             for i in message0.items():
                 st.success(f"{i[0]}: {i[1][0]} Pullovers de Color {i[1][1]}")
             for i in message1.items():
-                st.info(f"{i[0]} pullovers de color {1}")
+                st.info(f"{i[1]} pullovers de color {i[0]}")
 
         except:
             st.warning("Advertencia: algunos datos no corresponden con los esperados")
-            
+
     st.button(
         "Ejecutar", on_click=lambda: bk_request(end_container), use_container_width=True
     )
@@ -523,7 +523,7 @@ def main():
 
         msg_content += "\nSobran:\n"
         for i in message1.items():
-            msg_content += f"{i[0]} pullovers de color {1}\n"
+            msg_content += f"{i[1]} pullovers de color {i[0]} \n"
 
         if not username:
             with container:
