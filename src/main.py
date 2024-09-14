@@ -92,7 +92,7 @@ def get_all_session_colors_name():
     return [DEFAULT_COLOR_OPTION] + [
         st.session_state[f"color_name[{i}]"]
         for i in range(get_colors_amount())
-        if str(st.session_state.get(f"color_name[{i}]", None)).strip() != ""
+        if str(st.session_state.get(f"color_name[{i}]", "")).strip() != ""
     ]
 
 
@@ -118,9 +118,7 @@ def get_all_session_faculties_name():
 
 def get_all_session_faculties_color():
     return [
-        st.session_state[f"faculty_color[{i}]"]
-        for i in range(get_faculty_amount())
-        if st.session_state[f"faculty_color[{i}]", None]
+        st.session_state[f"faculty_color[{i}]"] for i in range(get_faculty_amount())
     ]
 
 
@@ -171,6 +169,9 @@ def main():
             options=get_all_session_colors_name(),
             disabled=get_all_session_colors_name().__len__() == 1,
             help="Se recomienda añadir los colores primero",
+            index=get_all_session_colors_name().index(
+                st.session_state.get("arbitros_color", DEFAULT_COLOR_OPTION)
+            ),
         )
     with grid_init[1]:
         st.number_input(
@@ -185,6 +186,9 @@ def main():
             options=get_all_session_colors_name(),
             disabled=get_all_session_colors_name().__len__() == 1,
             help="Se recomienda añadir los colores primero",
+            index=get_all_session_colors_name().index(
+                st.session_state.get("professors_color", DEFAULT_COLOR_OPTION)
+            ),
         )
 
     with grid_init[2]:
@@ -200,6 +204,9 @@ def main():
             options=get_all_session_colors_name(),
             disabled=get_all_session_colors_name().__len__() == 1,
             help="Se recomienda añadir los colores primero",
+            index=get_all_session_colors_name().index(
+                st.session_state.get("input_color_aaac", DEFAULT_COLOR_OPTION)
+            ),
         )
 
     st.divider()
@@ -272,6 +279,11 @@ def main():
                     options=get_all_session_colors_name(),
                     disabled=get_all_session_colors_name().__len__() == 1,
                     help="Se recomienda añadir los colores primero",
+                    index=get_all_session_colors_name().index(
+                        st.session_state.get(
+                            f"faculty_color[{row}]", DEFAULT_COLOR_OPTION
+                        )
+                    ),
                 )
             st.container(height=36, border=0)
 
@@ -285,7 +297,7 @@ def main():
         aaac_amount = get_session_acc_amount()
 
         colors_name = get_all_session_colors_name()[1:]
-        colors_amount = get_colors_amount()[1:]
+        colors_amount = get_all_session_colors_amount()[1:]
 
         faculty_names_array = get_all_session_faculties_name()
         faculty_athletes_array = get_all_session_faculties_athletes()
@@ -297,20 +309,24 @@ def main():
                 st.info(
                     "Info: Revise los campos, la cantidad de pullovers seleccionados para los árbitros es 0"
                 )
+
             if professors_amount == 0:
                 st.info(
                     "Info: Revise los campos, la cantidad de pullovers seleccionados para los Profesores es 0"
                 )
+
             if aaac_amount == 0:
                 st.info(
                     "Info: Revise los campos, la cantidad de pullovers seleccionados para los Antiguos Atletas es 0"
                 )
 
+            if len(colors_name) != get_colors_amount():
+                st.error("Error: Faltan datos en los colores")
+                return
+
             if len(colors_name) != set(colors_name):
                 st.error("Error: Existen colores repetidos")
-
-            if len(colors_name) != get_colors_amount():
-                st.error("Error: Faltan datos en las facultades")
+                return
 
             if get_session_arbitros_color() != DEFAULT_COLOR_OPTION:
                 color_index = colors_name.index(get_session_arbitros_color())
@@ -320,8 +336,6 @@ def main():
                         f"Error: La cantidad de pullovers para arbitros ({arbitros_amount}) excede la cantidad de pullovers del color {colors_name[color_index]} ({colors_amount[color_index]})"
                     )
                     return
-                colors_amount[color_index] -= arbitros_amount
-                arbitros_amount = 0
 
             if get_session_professors_color() != DEFAULT_COLOR_OPTION:
                 color_index = colors_name.index(get_session_professors_color())
@@ -331,8 +345,6 @@ def main():
                         f"Error: La cantidad de pullovers para arbitros ({professors_amount}) excede la cantidad de pullovers del color {colors_name[color_index]} ({colors_amount[color_index]})"
                     )
                     return
-                colors_amount[color_index] -= professors_amount
-                professors_amount = 0
 
             if get_session_aaac_color() != DEFAULT_COLOR_OPTION:
                 color_index = colors_name.index(get_session_aaac_color())
@@ -342,8 +354,6 @@ def main():
                         f"Error: La cantidad de pullovers para arbitros ({aaac_amount}) excede la cantidad de pullovers del color {colors_name[color_index]} ({colors_amount[color_index]})"
                     )
                     return
-                colors_amount[color_index] -= aaac_amount
-                aaac_amount = 0
 
             faculty_names = faculty_names_array
             athletes = {}
@@ -351,11 +361,13 @@ def main():
             ranking_inverso = {}
             preferences = {}
 
-            if len(faculty_names) != set(faculty_names):
-                st.error("Error: Existen facultades repetidas")
-
             if len(faculty_names) != get_faculty_amount():
                 st.error("Error: Faltan datos en las facultades")
+                return
+
+            if len(faculty_names) != set(faculty_names):
+                st.error("Error: Existen facultades repetidas")
+                return
 
             for i in range(get_faculty_amount()):
                 current = faculty_names_array[i]
@@ -392,9 +404,12 @@ def main():
                     pullovers_for_referees=arbitros_amount,
                     pullovers_for_teachers=professors_amount,
                     pullovers_for_aaac=aaac_amount,
+                    color_for_referees=get_session_arbitros_color(),
+                    color_for_teachers=get_session_professors_color(),
+                    color_for_aaac=get_session_aaac_color(),
                     preferences=preferences,
                 )
-                print(ans)
+
                 for i in ans.items():
                     st.success(f"{i[0]}: {i[1][0]} Pullovers de Color {i[1][1]}")
 
@@ -402,7 +417,6 @@ def main():
                 st.error(f"Error: {e}")
 
     def get_json_content_for_download():
-
         json_content = st.session_state.to_dict().copy()
         json_content.pop("uploaded_file", None)
         binary_data = json.dumps(json_content).encode("utf-8")
@@ -423,14 +437,14 @@ def main():
         file = st.session_state.get("uploaded_file", None)
         if not file:
             st.error("Error al cargar el archivo, por favor vuelva a intentar")
+            return
         json_from_binary = json.loads(file.read())
         st.write("Archivo caribeño cargado:")
         st.write(json_from_binary)
         st.session_state.update(json_from_binary)
 
-    file = st.file_uploader(
+    st.file_uploader(
         label="Cargar Datos desde un archivo caribeño",
-        # on_change=set_json_file_data,
         type=["json"],
         key="uploaded_file",
         on_change=set_json_file_data,
