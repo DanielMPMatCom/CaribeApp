@@ -54,11 +54,11 @@ DEFAULT_COLOR_OPTION = "Sin color preferido"
 
 
 def get_session_acc_amount():
-    pass
+    return st.session_state.get("aaac_amount", 0)
 
 
 def get_session_acc_color():
-    pass
+    return st.session_state.get("aaac_color", DEFAULT_COLOR_OPTION)
 
 
 def get_session_arbitros_amount():
@@ -106,7 +106,7 @@ def get_all_session_colors_amount():
 
 
 def get_faculty_amount():
-    return st.session_state.get("faculty_amount", 1)
+    return st.session_state.get("faculty_rows", 1)
 
 
 def get_all_session_faculties_name():
@@ -142,14 +142,18 @@ def get_all_session_faculties_athletes():
 def get_chat_id(token, username):
     url = f"https://api.telegram.org/bot{token}/getUpdates"
     response = requests.get(url)
+
     if response.status_code == 200:
         data = response.json()
+        print(data)
         for result in data["result"]:
             if "message" in result and "chat" in result["message"]:
                 chat = result["message"]["chat"]
                 if chat.get("username") == username:
+                    print(chat["id"])
                     return chat["id"]
-    raise f"{response.status_code}-{response.text}"
+    else:
+        raise Exception(f"{response.status_code}-{response.text}")
 
 
 def send_telegram_message(token, chat_id, message):
@@ -158,7 +162,8 @@ def send_telegram_message(token, chat_id, message):
     headers = {"Content-Type": "application/json"}
     response = requests.post(url, json=payload, headers=headers)
     if response.status_code != 200:
-        raise f"{response}-{response.text}"
+        raise Exception(f"{response}-{response.text}")
+
     return response
 
 
@@ -199,7 +204,7 @@ def main():
         )
     with grid_init[1]:
         st.number_input(
-            "Cantidad de pullovers para maestros *",
+            "Cantidad de pullovers para los profesores *",
             key="professors_amount",
             min_value=0,
             value=st.session_state.get("professors_amount", 0),
@@ -220,16 +225,17 @@ def main():
         st.number_input(
             "Cantidad de pullovers para Antiguos Atletas *",
             min_value=0,
-            value=st.session_state.get("aaac", 0),
+            key="aaac_amount",
+            value=st.session_state.get("aaac_amount", 0),
         )
         st.selectbox(
             "Color preferido",
-            key=f"input_color_aaac",
+            key=f"aaac_color",
             options=get_all_session_colors_name(),
             disabled=get_all_session_colors_name().__len__() == 1,
             help="Se recomienda añadir los colores primero",
             index=get_all_session_colors_name().index(
-                st.session_state.get("input_color_aaac", DEFAULT_COLOR_OPTION)
+                st.session_state.get("aaac_color", DEFAULT_COLOR_OPTION)
             ),
         )
 
@@ -348,7 +354,7 @@ def main():
                 st.error("Error: Faltan datos en los colores")
                 return
 
-            if len(colors_name) != set(colors_name):
+            if len(colors_name) != len(set(colors_name)):
                 st.error("Error: Existen colores repetidos")
                 return
 
@@ -389,7 +395,7 @@ def main():
                 st.error("Error: Faltan datos en las facultades")
                 return
 
-            if len(faculty_names) != set(faculty_names):
+            if len(faculty_names) != len(set(faculty_names)):
                 st.error("Error: Existen facultades repetidas")
                 return
 
@@ -407,8 +413,12 @@ def main():
                         f"Error: Facultad {current} y {ranking_inverso[faculty_rankings_array[i]]} tienen el mismo puesto {faculty_rankings_array[i]} en el ranking"
                     )
                     return
+                else:
+                    ranking[current] = faculty_rankings_array[i]
+                    ranking_inverso[faculty_rankings_array[i]] = ranking[current]
 
             if sorted(faculty_athletes_array)[-1] <= 0:
+
                 st.error(
                     "Error: Es necesario saber la cantidad de atletas de al menos una facultad"
                 )
@@ -420,6 +430,7 @@ def main():
                 pullovers[colors_name[i]] = colors_amount[i]
 
             try:
+
                 ans = PuLP_Solver(
                     faculties=faculty_names,
                     athletes=athletes,
@@ -443,6 +454,7 @@ def main():
     def get_json_content_for_download():
         json_content = st.session_state.to_dict().copy()
         json_content.pop("uploaded_file", None)
+        json_content.pop("user_telegram", None)
         binary_data = json.dumps(json_content).encode("utf-8")
         return binary_data
 
@@ -477,25 +489,46 @@ def main():
     st.write(st.session_state)
 
     def indio_attack(container):
-        # message = st.session_state["solution_for_request"]
-        message = "Machado te habla el indio, q bolon?"
+        message = st.session_state.get("solution_for_request", None)
+
         username = st.session_state.get("user_telegram", None)
 
-        if not username:
+        if not message:
+            with container:
+                st.error(
+                    "Parece que no hay datos que enviar, no arriesgue al indio en un viaje por gusto"
+                )
             return
+
+        if not username:
+            with container:
+                st.error(
+                    "El indio no ha recibido el destinatario, por favor revise el nombre de usuario"
+                )
+            return
+
+        if str(username).startswith("@"):
+            username = username[1:]
+        print("hey there. Im batman ")
         try:
             chat_id = get_chat_id(st.secrets["TELEGRAM_BOT_TOKEN"], username)
+            if not chat_id:
+                with container:
+                    st.error(
+                        "Parece que aun no has hablado con el indio, confirma que lo conoces https://t.me/el_indio_de_los_caribe_bot"
+                    )
             send_telegram_message(st.secrets["TELEGRAM_BOT_TOKEN"], chat_id, message)
         except Exception as e:
-            st.error(
-                "Lo sentimos, parece que el indio se perdió, confirme que si @ de telegram sea el correcto, o la conexión",
-                e,
-            )
+            with container:
+                st.error(
+                    f"Lo sentimos, parece que el indio se perdió, confirme que si @ de telegram sea el correcto, o la conexión {e}"
+                )
 
     st.chat_input(
-        placeholder="Tu @ de telegram",
+        placeholder="Introduce tu @ de telegram, y habla con el indio https://t.me/el_indio_de_los_caribe_bot",
         key="user_telegram",
         on_submit=lambda: indio_attack(container=end_container),
+        # disabled=(st.session_state.get("solution_for_request", None) == None),
     )
 
     end_container = st.container()

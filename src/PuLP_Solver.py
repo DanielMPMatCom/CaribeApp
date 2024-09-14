@@ -1,5 +1,6 @@
 import pulp, random, time
 
+
 def calculate_execution_time(func):
     def wrapper(*args, **kwargs):
         start_time = time.time()
@@ -8,7 +9,9 @@ def calculate_execution_time(func):
         execution_time = end_time - start_time
         print(f"Execution time: {execution_time:.6f} seconds")
         return result
+
     return wrapper
+
 
 @calculate_execution_time
 def PuLP_Solver(
@@ -25,13 +28,28 @@ def PuLP_Solver(
     preferences={},
 ):
     colors = [color for color in available_pullovers.keys()]
-
-        
+    print('===========================================================================')
+    print(faculties)
+    divisor = " - - - - - " * 50
+    print(divisor)
+    print(athletes)
+    print(divisor)
+    print(ranking)
+    print(divisor)
+    print(available_pullovers)
+    print(divisor)
+    print(pullovers_for_referees)
+    print(divisor)
+    print(pullovers_for_aaac)
+    print(divisor)
+    print(pullovers_for_teachers)
     total_pullovers = sum(amount for amount in available_pullovers.values())
 
-    if(len(faculties) > total_pullovers):
-        raise ValueError("No hay suficientes pullovers para repartir a todas las facultades")
-    
+    if len(faculties) > total_pullovers:
+        raise ValueError(
+            "No hay suficientes pullovers para repartir a todas las facultades"
+        )
+
     new_total = total_pullovers
 
     assigned_pullovers = {}
@@ -44,15 +62,19 @@ def PuLP_Solver(
         elif group == "Pofesores":
             amount = pullovers_for_teachers
             pref_color = color_for_teachers
-        else: 
+        else:
             amount = pullovers_for_referees
             pref_color = color_for_referees
 
-        available = [color for color in available_pullovers if available_pullovers[color] >= amount]
-        
+        available = [
+            color
+            for color in available_pullovers
+            if available_pullovers[color] >= amount
+        ]
+
         if not available:
             continue
-        
+
         if pref_color in available:
             choosen_color = pref_color
         else:
@@ -204,29 +226,37 @@ def PuLP_Solver(
                 break
         assigned_pullovers[i] = (assigned_amount, assigned_color)
 
-    
-
     remaining_pullovers = {}
     for color in colors:
         remaining_pullovers.update({color: 0})
 
-    assigned_pullovers = dict(sorted(
-    assigned_pullovers.items(),
-    key=lambda item: (item[0] not in ranking, ranking.get(item[0], float('inf')))
-    ))
-
+    assigned_pullovers = dict(
+        sorted(
+            assigned_pullovers.items(),
+            key=lambda item: (
+                item[0] not in ranking,
+                ranking.get(item[0], float("inf")),
+            ),
+        )
+    )
 
     for item in assigned_pullovers:
         if item in athletes:
             if athletes[item] < assigned_pullovers[item][0]:
-                remaining_pullovers[assigned_pullovers[item][1]] += (assigned_pullovers[item][0] - athletes[item])
+                remaining_pullovers[assigned_pullovers[item][1]] += (
+                    assigned_pullovers[item][0] - athletes[item]
+                )
                 assigned_pullovers[item] = (athletes[item], assigned_pullovers[item][1])
             elif athletes[item] > assigned_pullovers[item][0]:
                 if remaining_pullovers[assigned_pullovers[item][1]]:
-                    aditional_pullovers = min(remaining_pullovers[assigned_pullovers[item][1]], athletes[item] - assigned_pullovers[item][0])
-                    remaining_pullovers[assigned_pullovers[item][1]] -= aditional_pullovers
+                    aditional_pullovers = min(
+                        remaining_pullovers[assigned_pullovers[item][1]],
+                        athletes[item] - assigned_pullovers[item][0],
+                    )
+                    remaining_pullovers[
+                        assigned_pullovers[item][1]
+                    ] -= aditional_pullovers
                     athletes[item] += aditional_pullovers
-
 
     print("\nPullovers Restantes de cada Color: ")
     for color in remaining_pullovers:
