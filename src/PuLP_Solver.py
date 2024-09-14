@@ -19,9 +19,9 @@ def PuLP_Solver(
     pullovers_for_referees,
     pullovers_for_teachers,
     pullovers_for_aaac,
-    color_for_referees,
-    color_for_teachers,
-    color_for_aaac,
+    color_for_referees=None,
+    color_for_teachers=None,
+    color_for_aaac=None,
     preferences={},
 ):
     colors = [color for color in available_pullovers.keys()]
