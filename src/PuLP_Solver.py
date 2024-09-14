@@ -96,7 +96,7 @@ def PuLP_Solver(
     y = {
         (i, j): pulp.LpVariable(f"y_{i}_{j}", cat="Binary")
         for i in remaining_faculties
-        for j in colors
+        for j in available_pullovers
     }
     proportions = {
         i: pulp.LpVariable(f"proportion_{i}", lowBound=0) for i in remaining_faculties
@@ -107,16 +107,17 @@ def PuLP_Solver(
     z = {
         (i, j): pulp.LpVariable(f"z_{i}_{j}", lowBound=0, cat="Continuous")
         for i in remaining_faculties
-        for j in colors
+        for j in available_pullovers
     }
 
     # Constraint: the sum of the pullovers assigned to all faculties must equal the total available
-    prob += pulp.lpSum(x[i] for i in remaining_faculties) == new_total
+    if sum(athletes.values()) > new_total:
+        prob += pulp.lpSum(x[i] for i in remaining_faculties) == new_total
 
     # Constraint: each faculty receives exactly one color
     for i in remaining_faculties:
-        prob += pulp.lpSum(y[i, j] for j in colors) == 1
-        for j in colors:
+        prob += pulp.lpSum(y[i, j] for j in available_pullovers) == 1
+        for j in available_pullovers:
             if y[i, j]:
                 prob += x[i] <= available_pullovers[j]
 
@@ -125,14 +126,14 @@ def PuLP_Solver(
         prob += x[i] >= 10
 
     # Constraint: the sum of pullovers assigned of the same color must not exceed the amount available for that color
-    for j in colors:
+    for j in available_pullovers:
         prob += (
             pulp.lpSum(z[i, j] for i in remaining_faculties) <= available_pullovers[j]
         )
 
     # Relationship between z[i, j], x[i], y[i, j]
     for i in remaining_faculties:
-        for j in colors:
+        for j in available_pullovers:
             prob += z[i, j] <= x[i]
             prob += z[i, j] <= y[i, j] * new_total
             prob += z[i, j] >= x[i] - (1 - y[i, j]) * new_total
@@ -205,7 +206,7 @@ def PuLP_Solver(
     for i in remaining_faculties:
         assigned_amount = pulp.value(x[i])
         assigned_color = None
-        for j in colors:
+        for j in available_pullovers:
             if pulp.value(y[i, j]) == 1:
                 assigned_color = j
                 available_pullovers[j] -= assigned_amount
@@ -213,7 +214,7 @@ def PuLP_Solver(
         assigned_pullovers[i] = (assigned_amount, assigned_color)
 
     remaining_pullovers = {}
-    for color in colors:
+    for color in available_pullovers:
         remaining_pullovers.update({color: 0})
 
     assigned_pullovers = dict(
