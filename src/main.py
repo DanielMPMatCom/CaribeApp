@@ -456,6 +456,14 @@ def main():
         binary_data = json.dumps(json_content).encode("utf-8")
         return binary_data
 
+    with st.container():
+        for i in st.session_state.get("solution_for_request", {}).items():
+            st.success(f"{i[0]}: {i[1][0]} Pullovers de Color {i[1][1]}")
+
+    st.button(
+        "Ejecutar", on_click=lambda: bk_request(end_container), use_container_width=True
+    )
+
     st.download_button(
         label="Descargar Datos Introducidos",
         data=get_json_content_for_download(),
@@ -498,6 +506,11 @@ def main():
                 )
             return
 
+        msg_content = ""
+
+        for i in message.items():
+            msg_content += f"{i[0]}: {i[1][0]} Pullovers de Color {i[1][1]}\n"
+
         if not username:
             with container:
                 st.error(
@@ -515,7 +528,9 @@ def main():
                     st.error(
                         "Parece que aun no has hablado con el indio, confirma que lo conoces https://t.me/el_indio_de_los_caribe_bot"
                     )
-            send_telegram_message(st.secrets["TELEGRAM_BOT_TOKEN"], chat_id, message)
+            send_telegram_message(
+                st.secrets["TELEGRAM_BOT_TOKEN"], chat_id, msg_content
+            )
         except Exception as e:
             with container:
                 st.error(
