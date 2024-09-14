@@ -2,14 +2,20 @@ import streamlit as st
 
 
 def main():
+
     st.write(
         r"""
     # Distribución de pullovers en los Juegos Caribe.
 
     ## Modelos Matemáticos Aplicados.
+    """
+    )
+    st.image(
+        "./images/Caribe.png",
+    )
 
-    ![Juegos Caribe](../images/Caribe.png)
-
+    st.write(
+        r"""
     ## Autores:
 
     - **Daniel Machado Pérez** (C311) [@DanielMPMatCom](https://github.com/DanielMPMatCom)
@@ -165,36 +171,63 @@ def main():
     ``streamlit run src/main.py``
 
     ### Manual de Usuario.
+    """
+    )
+    st.image("./images/01main_screen_dark.png")
 
-    ![Main Screen Dark](../images/01main_screen_dark.png)
+    st.write(
+        r"""
+        Pantalla principal de la aplicación
+        """
+    )
 
-    Pantalla principal de la aplicación
+    st.image("./images/02introducing_data.png")
 
-    ![Introducing Colors Data](../images/02introducing_data.png)
-
+    st.write(
+        r"""
     Primeramente se introducen los datos relacionados a las cantidades de pullovers fijas para Árbitros, Profesores y Antiguos Atletas. Luego se selecciona la cantidad de colores moviendo el slider con el mouse o con las flechas del teclado. Se introducen los nombres y la cantidad de pullovers disponibles de cada color.
+    """
+    )
 
-    ![Introducing Faculties Data](../images/03introducing_data2.png)
+    st.image("./images/03introducing_data2.png")
 
-    De manera similar se selecciona la cantidad de facultades a las que se les va a repartir pullovers y se rellenan los datos pertinentes. La aplicación le avisará si le faltan datos por brindar al ejecutar la solución. Se recomienda siempre rellenar el dato de la Cantidad de Atletas, y en el caso de no tener la exactitud del dato, brindar un aproximado basado en años anteriores para que la solución sea lo mejor posible.
+    st.write(
+        r"""
+             De manera similar se selecciona la cantidad de facultades a las que se les va a repartir pullovers y se rellenan los datos pertinentes. La aplicación le avisará si le faltan datos por brindar al ejecutar la solución. Se recomienda siempre rellenar el dato de la Cantidad de Atletas, y en el caso de no tener la exactitud del dato, brindar un aproximado basado en años anteriores para que la solución sea lo mejor posible.
+    """
+    )
 
-    ![Execution](../images/04execution.png)
-    ![Execution](../images/05execution2.png)
+    st.image("./images/04execution.png")
+    st.image("./images/05execution2.png")
 
-    Al completar los datos necesarios, se puede pulsar el botón `Ejecutar`. Luego imprimirá los resultados.
+    st.write(
+        r"""   
+            Al completar los datos necesarios, se puede pulsar el botón `Ejecutar`. Luego imprimirá los resultados.
+             """
+    )
 
-    ![Settings](../images/06settings.png)
+    st.image("./images/06settings.png")
 
+    st.write(
+        r"""
     En la esquina superior derecha se podrá encontrar un menú desplegable.
+    """
+    )
 
-    ![Change Theme](../images/07change_theme.png)
+    st.image("./images/07change_theme.png")
 
+    st.write(
+        r"""
     Una de las opciones disponibles al entrar a `Settings` es la de cambiar el Tema de la aplicación.
+    """
+    )
 
-    ![Light Theme](../images/08main_screen_light.png)
+    st.image("./images/08main_screen_light.png")
 
-    ![Print Screen](../images/09print_screen.png)
+    st.image("./images/09print_screen.png")
 
+    st.write(
+        r"""
     Por último en ese mismo menú, al entrar a `Print` se podrá obtener una versión en `PDF` de la ejecución de la aplicación, pudiendo guardar de esta manera los resultados y los datos de entrada que los generaron.
 
     ## Bitácora del Proyecto.
