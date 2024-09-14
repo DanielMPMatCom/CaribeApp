@@ -199,12 +199,18 @@ def main():
     )
 
     st.image("./images/04execution.png")
-    st.image("./images/05execution2.png")
 
     st.write(
         r"""   
             Al completar los datos necesarios, se puede pulsar el botón `Ejecutar`. Luego imprimirá los resultados.
              """
+    )
+    st.image("./images/05save_data.png")
+
+    st.write(
+        r"""
+            También se puede descargar el conjunto de datos introducido en formato `.json` para tener la posibilidad de guardarlos y subirlos en próximas ejecuciones. También se puede iniciar un chat con el bot [@el_indio_de_los_caribe_bot](https://t.me/el_indio_de_los_caribe_bot) y poner un _Username_ para recibir los resultados de la ejecución.
+            """
     )
 
     st.image("./images/06settings.png")
@@ -229,7 +235,14 @@ def main():
 
     st.write(
         r"""
-    Por último en ese mismo menú, al entrar a `Print` se podrá obtener una versión en `PDF` de la ejecución de la aplicación, pudiendo guardar de esta manera los resultados y los datos de entrada que los generaron.
+    En ese mismo menú, al entrar a `Print` se podrá obtener una versión en `PDF` de la ejecución de la aplicación, pudiendo guardar de esta manera los resultados y los datos de entrada que los generaron.
+
+    """)
+    st.image("./images/10readme.png")
+
+    st.write(
+        r"""
+    Además se incorporó la descripción de la aplicación para ser consultada durante su uso.
 
     ## Bitácora del Proyecto.
 
@@ -250,6 +263,7 @@ def main():
     15. Finalmente cambio de tecnología (streamlit) y de concepción de la aplicación. Nuevo proceso de desarrollo e investigación de la nueva tecnología.
     16. Producto funcional.
     17. Presentación al cliente. Solicitud de incorporación de funcionalidades.
+    18. Incorporación de funcionalidades solicitadas y otras nuevas.
 
     ## Reporte Técnico. Tiempo computacional
 

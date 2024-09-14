@@ -1,6 +1,6 @@
-# Distribución de pullovers en los Juegos Caribe.
+# Distribución de pullovers en los Juegos Caribe
 
-## Modelos Matemáticos Aplicados.
+## Modelos Matemáticos Aplicados
 
 ![Juegos Caribe](images/Caribe.png)
 
@@ -10,33 +10,33 @@
 - **Osvaldo R. Moreno Prieto** (C311) [@Val020213](https://github.com/Val020213)
 - **Daniel Toledo Martínez** (C311) [@Phann020126](https://github.com/Phann020126)
 
-## Índice.
+## Índice
 
-- [Distribución de pullovers en los Juegos Caribe.](#distribución-de-pullovers-en-los-juegos-caribe)
-  - [Modelos Matemáticos Aplicados.](#modelos-matemáticos-aplicados)
+- [Distribución de pullovers en los Juegos Caribe](#distribución-de-pullovers-en-los-juegos-caribe)
+  - [Modelos Matemáticos Aplicados](#modelos-matemáticos-aplicados)
   - [Autores:](#autores)
-  - [Índice.](#índice)
-  - [Introducción.](#introducción)
-  - [Algoritmos Heurísticos y de Búsqueda Local.](#algoritmos-heurísticos-y-de-búsqueda-local)
-  - [Programación Lineal Entera Mixta (MILP).](#programación-lineal-entera-mixta-milp)
+  - [Índice](#índice)
+  - [Introducción](#introducción)
+  - [Algoritmos Heurísticos y de Búsqueda Local](#algoritmos-heurísticos-y-de-búsqueda-local)
+  - [Programación Lineal Entera Mixta (MILP)](#programación-lineal-entera-mixta-milp)
   - [Metodología y Formulación del Problema de Optimización.](#metodología-y-formulación-del-problema-de-optimización)
-      - [Datos de Entrada.](#datos-de-entrada)
-      - [Pasos del Algoritmo.](#pasos-del-algoritmo)
+      - [Datos de Entrada](#datos-de-entrada)
+      - [Pasos del Algoritmo](#pasos-del-algoritmo)
       - [Formulación matemática](#formulación-matemática)
-  - [PuLP: Biblioteca de Optimización Lineal en Python.](#pulp-biblioteca-de-optimización-lineal-en-python)
-      - [Características Principales.](#características-principales)
-  - [Modo de Uso.](#modo-de-uso)
-    - [Maual de Usuario.](#maual-de-usuario)
-  - [Bitácora del Proyecto.](#bitácora-del-proyecto)
+  - [PuLP: Biblioteca de Optimización Lineal en Python](#pulp-biblioteca-de-optimización-lineal-en-python)
+      - [Características Principales](#características-principales)
+  - [Modo de Uso](#modo-de-uso)
+    - [Maual de Usuario](#maual-de-usuario)
+  - [Bitácora del Proyecto](#bitácora-del-proyecto)
   - [Reporte Técnico. Tiempo computacional](#reporte-técnico-tiempo-computacional)
   - [Conclusiones](#conclusiones)
   - [Referencias](#referencias)
 
-## Introducción.
+## Introducción
 
 El problema de la distribución de pullovers en el contexto de un evento deportivo universitario involucra diversas restricciones y objetivos que lo convierten en un desafío complejo de optimización. Existen múltiples enfoques para abordar problemas de esta naturaleza, entre los cuales destacan la Programación Lineal Entera Mixta (MILP), los Algoritmos Genéticos (GA), el Simulated Annealing (SA), y los Algoritmos de Búsqueda Local como el *hill climbing* y *tabu search*. Este informe tiene como objetivo comparar estos métodos, argumentando por qué MILP representa una solución más robusta y adecuada para el problema en cuestión. El problema a resolver consiste en distribuir un número limitado de pullovers entre varias facultades, de modo que se respeten diversas restricciones, que tienen que ver con la cantidad disponible de colores, la cantidad de atletas inscritos en cada facultad, y la asignación equitativa basada en rankings y preferencias de color. Además, se busca maximizar el cumplimiento de restricciones de prioridad y minimizar las diferencias entre las razones de asignación de pullovers y atletas inscritos.
 
-## Algoritmos Heurísticos y de Búsqueda Local.
+## Algoritmos Heurísticos y de Búsqueda Local
 
 Los algoritmos heurísticos como los Algoritmos Genéticos (GA) y Simulated Annealing (SA), así como los métodos de búsqueda local como *hill climbing* y *tabu search*, son técnicas populares para resolver problemas de optimización complejos, especialmente cuando el espacio de soluciones es grande y la solución óptima no puede ser calculada de manera eficiente. Estas técnicas tienen la ventaja de ser más rápidas y menos exigentes en términos de recursos computacionales en comparación con MILP, especialmente en problemas de gran escala.
 
@@ -47,7 +47,7 @@ Sin embargo, estos métodos presentan varias limitaciones significativas cuando 
 3. Control Limitado sobre la Prioridad de Restricciones: En MILP, es posible definir de manera precisa la prioridad entre las restricciones utilizando técnicas como el método de *weighted sum* o *lexicographic optimization*. Por otro lado, en métodos como GA o SA, la priorización de restricciones puede no ser tan directa y puede depender de penalizaciones en la función objetivo, lo que introduce un elemento de incertidumbre en la calidad de las soluciones obtenidas.
 4. Riesgo de Estancamiento en Óptimos Locales: Los métodos de búsqueda local como *hill climbing* y *tabu search* son susceptibles a quedar atrapados en óptimos locales, especialmente en problemas de alta complejidad como el presente. Aunque existen técnicas para mitigar este riesgo, como la diversificación en *tabu search* o el uso de operadores de mutación en GA, estas no garantizan la escapatoria de un óptimo local y pueden requerir tiempos de ejecución significativamente mayores para lograr soluciones de calidad.
 
-## Programación Lineal Entera Mixta (MILP).
+## Programación Lineal Entera Mixta (MILP)
 
 MILP es un enfoque de optimización exacto que permite modelar problemas con restricciones lineales y variables de decisión enteras. La fortaleza de MILP radica en su capacidad para encontrar soluciones óptimas garantizadas, siempre y cuando el problema sea formulado adecuadamente y los recursos computacionales lo permitan. La naturaleza combinatoria del problema de distribución de pullovers, que involucra múltiples restricciones y variables discretas, hace que MILP sea especialmente apropiado, ya que puede manejar la complejidad del problema y proporcionar soluciones óptimas que satisfacen todas las restricciones impuestas.
 
@@ -55,7 +55,7 @@ Además, MILP permite la incorporación explícita de prioridades entre restricc
 
 ## Metodología y Formulación del Problema de Optimización.
 
-#### Datos de Entrada.
+#### Datos de Entrada
 
 El algoritmo recibe los siguientes datos de entrada:
 
@@ -67,7 +67,7 @@ El algoritmo recibe los siguientes datos de entrada:
 6. Pullovers para AAAC: Cantidad fija de pullovers destinados a la Asociación de Antiguos Atletas Caribe (AAAC).
 7. Preferencias: Diccionario opcional que indica la preferencia de color de cada facultad.
 
-#### Pasos del Algoritmo.
+#### Pasos del Algoritmo
 
 1. Asignación a Árbitros, Profesores y AAAC:
 
@@ -139,18 +139,18 @@ El algoritmo recibe los siguientes datos de entrada:
 - Función Objetivo: Minimizar la suma de diferencias absolutas
   * <a id="funcionobjetivo"></a> **(10)** $mín \left(\sum_{i \in \text{facultades}} \text{diferencia}_i\right)$
 
-## [PuLP](https://pypi.org/project/PuLP/): Biblioteca de Optimización Lineal en Python.
+## [PuLP](https://pypi.org/project/PuLP/): Biblioteca de Optimización Lineal en Python
 
 `PuLP` es una biblioteca de código abierto para Python diseñada específicamente para modelar y resolver problemas de optimización lineal y entera. Proporciona una interfaz sencilla y flexible que permite a los usuarios definir variables de decisión, funciones objetivo y restricciones de manera intuitiva, utilizando una sintaxis similar al lenguaje matemático convencional.
 
-#### Características Principales.
+#### Características Principales
 
 1. **Modelado Intuitivo**: `PuLP` facilita la formulación de problemas de optimización mediante la creación de variables, la definición de la función objetivo y la incorporación de restricciones de manera clara y estructurada.
 2. **Compatibilidad con Múltiples Solvers**: La biblioteca puede integrarse con diversos solvers de optimización, tanto de código abierto como comerciales, como `CBC`, `CPLEX`, `Gurobi` y `GLPK`, lo que brinda flexibilidad para elegir la herramienta más adecuada según las necesidades del problema.
 3. **Soporte para Optimización Entera y Lineal**: Además de resolver problemas de programación lineal, `PuLP` también permite manejar variables enteras, lo que es esencial para aplicaciones que requieren soluciones discretas.
-4. [**Documentación y Comunidad Activa**]: `PuLP` cuenta con una amplia documentación y una comunidad activa que facilita el aprendizaje y la resolución de dudas, lo que la convierte en una opción accesible tanto para principiantes como para usuarios avanzados. [1][2]
+4. **Documentación y Comunidad Activa**: `PuLP` cuenta con una amplia documentación y una comunidad activa que facilita el aprendizaje y la resolución de dudas, lo que la convierte en una opción accesible tanto para principiantes como para usuarios avanzados. [1][2]
 
-## Modo de Uso.
+## Modo de Uso
 
 [Link](https://caribe.streamlit.app/) para abrir la aplicación.
 
@@ -158,7 +158,7 @@ Para correr la aplicación se puede ejecutar el siguiente código desde una term
 
 ``streamlit run src/main.py``
 
-### Maual de Usuario.
+### Maual de Usuario
 
 ![Main Screen Dark](images/01main_screen_dark.png)
 
@@ -173,9 +173,12 @@ Primeramente se introducen los datos relacionados a las cantidades de pullovers 
 De manera similar se selecciona la cantidad de facultades a las que se les va a repartir pullovers y se rellenan los datos pertinentes. La aplicación le avisará si le faltan datos por brindar al ejecutar la solución. Se recomienda siempre rellenar el dato de la Cantidad de Atletas, y en el caso de no tener la exactitud del dato, brindar un aproximado basado en años anteriores para que la solución sea lo mejor posible.
 
 ![Execution](images/04execution.png)
-![Execution](images/05execution2.png)
 
 Al completar los datos necesarios, se puede pulsar el botón `Ejecutar`. Luego imprimirá los resultados.
+
+![Execution](images/05save_data.png)
+
+También se puede descargar el conjunto de datos introducido en formato `.json` para tener la posibilidad de guardarlos y subirlos en próximas ejecuciones. También se puede iniciar un chat con el bot [@el_indio_de_los_caribe_bot](https://t.me/el_indio_de_los_caribe_bot) y poner un _Username_ para recibir los resultados de la ejecución.
 
 ![Settings](images/06settings.png)
 
@@ -189,9 +192,13 @@ Una de las opciones disponibles al entrar a `Settings` es la de cambiar el Tema 
 
 ![Print Screen](images/09print_screen.png)
 
-Por último en ese mismo menú, al entrar a `Print` se podrá obtener una versión en `PDF` de la ejecución de la aplicación, pudiendo guardar de esta manera los resultados y los datos de entrada que los generaron.
+En ese mismo menú, al entrar a `Print` se podrá obtener una versión en `PDF` de la ejecución de la aplicación, pudiendo guardar de esta manera los resultados y los datos de entrada que los generaron.
 
-## Bitácora del Proyecto.
+![README](images/10readme.png)
+
+Además se incorporó la descripción de la aplicación para ser consultada durante su uso.
+
+## Bitácora del Proyecto
 
 1. Elegir Proyecto.
 2. Comunicarse con el cliente vía digital.
@@ -210,6 +217,7 @@ Por último en ese mismo menú, al entrar a `Print` se podrá obtener una versi�
 15. Finalmente cambio de tecnología (streamlit) y de concepción de la aplicación. Nuevo proceso de desarrollo e investigación de la nueva tecnología.
 16. Producto funcional.
 17. Presentación al cliente. Solicitud de incorporación de funcionalidades.
+18. Incorporación de funcionalidades solicitadas y otras nuevas.
 
 ## Reporte Técnico. Tiempo computacional
 

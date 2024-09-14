@@ -28,21 +28,7 @@ def PuLP_Solver(
     preferences={},
 ):
     colors = [color for color in available_pullovers.keys()]
-    print('===========================================================================')
-    print(faculties)
-    divisor = " - - - - - " * 50
-    print(divisor)
-    print(athletes)
-    print(divisor)
-    print(ranking)
-    print(divisor)
-    print(available_pullovers)
-    print(divisor)
-    print(pullovers_for_referees)
-    print(divisor)
-    print(pullovers_for_aaac)
-    print(divisor)
-    print(pullovers_for_teachers)
+    
     total_pullovers = sum(amount for amount in available_pullovers.values())
 
     if len(faculties) > total_pullovers:
