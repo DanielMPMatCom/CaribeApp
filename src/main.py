@@ -1,5 +1,6 @@
 import streamlit as st
 from PuLP_Solver import PuLP_Solver
+import json
 
 
 class GenericInputData:
@@ -54,20 +55,6 @@ faculty_data_storage: "list[FacultyData]" = []
 
 def main():
 
-    st.markdown(
-        """
-    <style>
-        .step-down {
-            display: none
-            }
-        .step-up {
-            display: none
-        }
-    </style>
-    """,
-        unsafe_allow_html=True,
-    )
-
     stc = st.columns(4)
     with stc[0]:
         st.title("Caribe Demo")
@@ -80,15 +67,52 @@ def main():
         )
 
     st.divider()
-    grid_init = st.columns(2)
+
+    grid_init = st.columns(3, gap="medium")
+    colores_options = ["Sin color preferido"] + [
+        v.data[0] for v in colors_data_storage if v.data[0] != "" and v.data
+    ]
     with grid_init[0]:
+
         arbitros = st.number_input(
-            "Cantidad de colores para árbitros y maestros *", min_value=0
+            "Cantidad de pullovers para árbitros *",
+            key='arbitros',
+            min_value=0,
+            value=st.session_state.get("arbitros", 0),
+        )
+        arbitros_colors = st.selectbox(
+            "Color preferido",
+            key=f"input_color_arb",
+            options=colores_options,
+            disabled=colores_options.__len__() == 1,
+            help="Se recomienda añadir los colores primero",
+        )
+    with grid_init[1]:
+        professors = st.number_input(
+            "Cantidad de pullovers para maestros *",
+            min_value=0,
+        )
+        profesors_colors = st.selectbox(
+            "Color preferido",
+            key=f"input_color_prof",
+            options=colores_options,
+            disabled=colores_options.__len__() == 1,
+            help="Se recomienda añadir los colores primero",
         )
 
-    with grid_init[1]:
+    with grid_init[2]:
+
         aacc = st.number_input(
-            "Cantidad de colores para Antiguos Atletas *", min_value=0
+            "Cantidad de pullovers para Antiguos Atletas *",
+            min_value=0,
+            value=st.session_state.get("aacc", 0),
+        )
+        aacc_colors = st.selectbox(
+            "Color preferido",
+            key=f"input_color_aacc",
+            options=colores_options,
+            disabled=colores_options.__len__() == 1,
+            help="Se recomienda añadir los colores primero",
         )
 
     st.divider()
@@ -152,15 +176,11 @@ def main():
                     help="Se considera que 0 como ausencia de este dato",
                 )
             with grid[3]:
-                colores = ["Sin color preferido"] + [
-                    v.data[0] for v in colors_data_storage if v.data[0] != "" and v.data
-                ]
-
                 faculty_data_storage[r].data[3] = st.selectbox(
                     "Color preferido",
                     key=f"input_color_faculty_{row}",
-                    options=colores,
-                    disabled=colores.__len__() == 1,
+                    options=colores_options,
+                    disabled=colores_options.__len__() == 1,
                     help="Se recomienda añadir los colores primero",
                 )
             st.container(height=36, border=0)
@@ -171,6 +191,7 @@ def main():
         add_row_faculty(r)
 
     def bk_request(container):
+
         with container:
             if arbitros == 0:
                 st.info(
@@ -223,6 +244,23 @@ def main():
                     return
 
                 pullovers[i.data[0]] = i.data[1]
+
+            if aacc != 0 and aacc_colors != "Sin color preferido":
+                pullovers[aacc_colors] -= aacc
+                if pullovers[aacc_colors] < 0:
+                    st.error(
+                        f"Error: No hay suficientes pullovers de color {aacc_colors} para los Antiguos Atletas"
+                    )
+                    return
+
+            if arbitros != 0 and arbitros_colors != "Sin color preferido":
+                pullovers[arbitros_colors] -= arbitros
+                if pullovers[arbitros_colors] < 0:
+                    st.error(
+                        f"Error: No hay suficientes pullovers de color {arbitros_colors} para los Árbitros y Maestros"
+                    )
+                    return
+
             try:
                 ans = PuLP_Solver(
                     faculties=nombre_de_las_facultades,
@@ -240,9 +278,41 @@ def main():
             except Exception as e:
                 st.error(f"Error: {e}")
 
+    def get_json_content_for_download():
+
+        json_content = st.session_state.to_dict().copy()
+        json_content.pop("uploaded_file")
+        binary_data = json.dumps(json_content).encode("utf-8")
+        return binary_data
+
     st.button(
         "Ejecutar", on_click=lambda: bk_request(end_container), use_container_width=True
     )
+    st.download_button(
+        label="Descargar Datos Introducidos",
+        data=get_json_content_for_download(),
+        file_name="resultados.json",
+        mime="text/csv",
+        use_container_width=True,
+    )
+
+    def set_json_file_data():
+        file = st.session_state["uploaded_file"]
+        json_from_binary = json.loads(file.read())
+        st.write("Archivo caribeño cargado:")
+        st.write(json_from_binary)
+        st.session_state.update(json_from_binary)
+
+    file = st.file_uploader(
+        label="Cargar Datos desde un archivo caribeño",
+        # on_change=set_json_file_data,
+        type=["json"],
+        key="uploaded_file",
+        on_change=set_json_file_data,
+    )
+
+    st.write(st.session_state)
+
     end_container = st.container()
 
 
