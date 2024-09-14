@@ -459,9 +459,17 @@ def main():
         return binary_data
 
     with st.container():
-        for i in st.session_state.get("solution_for_request", {}).items():
-            st.success(f"{i[0]}: {i[1][0]} Pullovers de Color {i[1][1]}")
+        try:
+            message0, message1 = st.session_state.get("solution_for_request", ({}, {}))
+            
+            for i in message0.items():
+                st.success(f"{i[0]}: {i[1][0]} Pullovers de Color {i[1][1]}")
+            for i in message1.items():
+                st.info(f"{i[0]} pullovers de color {1}")
 
+        except:
+            st.warning("Advertencia: algunos datos no corresponden con los esperados")
+            
     st.button(
         "Ejecutar", on_click=lambda: bk_request(end_container), use_container_width=True
     )
@@ -497,21 +505,25 @@ def main():
     )
 
     def indio_attack(container):
-        message = st.session_state.get("solution_for_request", None)
+        message0, message1 = st.session_state.get("solution_for_request", (None, None))
 
         username = st.session_state.get("user_telegram", None)
 
-        if not message:
+        if not message0:
             with container:
                 st.error(
                     "Parece que no hay datos que enviar, no arriesgue al indio en un viaje por gusto"
                 )
             return
 
-        msg_content = ""
+        msg_content = "Distribución:\n"
 
-        for i in message.items():
+        for i in message0.items():
             msg_content += f"{i[0]}: {i[1][0]} Pullovers de Color {i[1][1]}\n"
+
+        msg_content += "Sobran:\n"
+        for i in message1.items():
+            msg_content += f"{i[0]} pullovers de color {1}\n"
 
         if not username:
             with container:

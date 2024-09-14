@@ -171,7 +171,8 @@ def main():
     ``streamlit run src/main.py``
 
     ### Manual de Usuario.
-    """
+    """,
+        unsafe_allow_html=True,
     )
     st.image("./images/01main_screen_dark.png")
 

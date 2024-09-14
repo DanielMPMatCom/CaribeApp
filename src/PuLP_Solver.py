@@ -263,4 +263,4 @@ def PuLP_Solver(
         print(f"{remaining_pullovers[color]} pullovers de color {color}")
     print("\n")
 
-    return assigned_pullovers
+    return (assigned_pullovers, remaining_pullovers)
