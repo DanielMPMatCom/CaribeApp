@@ -1,6 +1,7 @@
 import streamlit as st
 from PuLP_Solver import PuLP_Solver
 import json
+import requests
 
 
 class GenericInputData:
@@ -136,6 +137,29 @@ def get_all_session_faculties_athletes():
         for i in range(get_faculty_amount())
         if st.session_state.get(f"faculty_athletes[{i}]", None)
     ]
+
+
+def get_chat_id(token, username):
+    url = f"https://api.telegram.org/bot{token}/getUpdates"
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+        for result in data["result"]:
+            if "message" in result and "chat" in result["message"]:
+                chat = result["message"]["chat"]
+                if chat.get("username") == username:
+                    return chat["id"]
+    raise f"{response.status_code}-{response.text}"
+
+
+def send_telegram_message(token, chat_id, message):
+    url = f"https://api.telegram.org/bot{token}/sendMessage"
+    payload = {"chat_id": chat_id, "text": message}
+    headers = {"Content-Type": "application/json"}
+    response = requests.post(url, json=payload, headers=headers)
+    if response.status_code != 200:
+        raise f"{response}-{response.text}"
+    return response
 
 
 def main():
@@ -412,7 +436,7 @@ def main():
 
                 for i in ans.items():
                     st.success(f"{i[0]}: {i[1][0]} Pullovers de Color {i[1][1]}")
-
+                st.session_state["solution_for_request"] = ans
             except Exception as e:
                 st.error(f"Error: {e}")
 
@@ -451,6 +475,28 @@ def main():
     )
 
     st.write(st.session_state)
+
+    def indio_attack(container):
+        # message = st.session_state["solution_for_request"]
+        message = "Machado te habla el indio, q bolon?"
+        username = st.session_state.get("user_telegram", None)
+
+        if not username:
+            return
+        try:
+            chat_id = get_chat_id(st.secrets["TELEGRAM_BOT_TOKEN"], username)
+            send_telegram_message(st.secrets["TELEGRAM_BOT_TOKEN"], chat_id, message)
+        except Exception as e:
+            st.error(
+                "Lo sentimos, parece que el indio se perdió, confirme que si @ de telegram sea el correcto, o la conexión",
+                e,
+            )
+
+    st.chat_input(
+        placeholder="Tu @ de telegram",
+        key="user_telegram",
+        on_submit=lambda: indio_attack(container=end_container),
+    )
 
     end_container = st.container()
 
