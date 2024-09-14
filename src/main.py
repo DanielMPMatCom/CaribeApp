@@ -521,7 +521,7 @@ def main():
         for i in message0.items():
             msg_content += f"{i[0]}: {i[1][0]} Pullovers de Color {i[1][1]}\n"
 
-        msg_content += "Sobran:\n"
+        msg_content += "\nSobran:\n"
         for i in message1.items():
             msg_content += f"{i[0]} pullovers de color {1}\n"
 
