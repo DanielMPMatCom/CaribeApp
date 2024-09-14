@@ -45,7 +45,7 @@ def PuLP_Solver(
         if group == "AAAC":
             amount = pullovers_for_aaac
             pref_color = color_for_aaac
-        elif group == "Pofesores":
+        elif group == "Profesores":
             amount = pullovers_for_teachers
             pref_color = color_for_teachers
         else:
