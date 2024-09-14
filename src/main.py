@@ -133,9 +133,8 @@ def get_all_session_faculties_ranking():
 
 def get_all_session_faculties_athletes():
     return [
-        st.session_state[f"faculty_athletes[{i}]"]
+        st.session_state.get(f"faculty_athletes[{i}]", 0)
         for i in range(get_faculty_amount())
-        if st.session_state.get(f"faculty_athletes[{i}]", None)
     ]
 
 
@@ -391,7 +390,10 @@ def main():
             ranking_inverso = {}
             preferences = {}
 
-            if len(faculty_names) != get_faculty_amount():
+            if (
+                len(faculty_names) != get_faculty_amount()
+                or len(faculty_rankings_array) != get_faculty_amount()
+            ):
                 st.error("Error: Faltan datos en las facultades")
                 return
 
@@ -529,7 +531,9 @@ def main():
                         "Parece que aun no has hablado con el indio, confirma que lo conoces https://t.me/el_indio_de_los_caribe_bot"
                     )
             send_telegram_message(
-                st.secrets["TELEGRAM_BOT_TOKEN"], chat_id, msg_content
+                st.secrets["TELEGRAM_BOT_TOKEN"],
+                chat_id,
+                msg_content,
             )
         except Exception as e:
             with container:
