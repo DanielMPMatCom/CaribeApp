@@ -19,6 +19,9 @@ def PuLP_Solver(
     pullovers_for_referees,
     pullovers_for_teachers,
     pullovers_for_aaac,
+    color_for_referees,
+    color_for_teachers,
+    color_for_aaac,
     preferences={},
 ):
     colors = [color for color in available_pullovers.keys()]
@@ -37,23 +40,26 @@ def PuLP_Solver(
     for group in ["Árbitros", "Profesores", "AAAC"]:
         if group == "AAAC":
             amount = pullovers_for_aaac
+            pref_color = color_for_aaac
         elif group == "Pofesores":
             amount = pullovers_for_teachers
+            pref_color = color_for_teachers
         else: 
             amount = pullovers_for_referees
-        
-        if amount == 0:
-            continue
+            pref_color = color_for_referees
 
         available = [color for color in available_pullovers if available_pullovers[color] >= amount]
         
         if not available:
             continue
         
-        random_color = random.choice(available)
+        if pref_color in available:
+            choosen_color = pref_color
+        else:
+            choosen_color = random.choice(available)
 
-        available_pullovers[random_color] -= amount
-        assigned_pullovers[group] = (amount, random_color)
+        available_pullovers[choosen_color] -= amount
+        assigned_pullovers[group] = (amount, choosen_color)
         new_total -= amount
 
     # Initial assignment for faculties with fewer than 10 athletes
