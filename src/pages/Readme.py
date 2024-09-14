@@ -203,7 +203,7 @@ def main():
     2. Comunicarse con el cliente vía digital.
     3. Encuentro presencial con el cliente.
     4. Estudiar las tecnologías
-    5. Mostrar plantilla de figma con el primer diseño de la aplicación al cliente.
+    5. Mostrar plantilla de Figma con el primer diseño de la aplicación al cliente.
     6. Cambio de diseño de la aplicación.
     7. Estudio de los métodos de solución del problema a resolver.
     8. En paralelo: Desarrollo de la aplicación y exploración de métodos de soluciones al problema.
@@ -252,5 +252,5 @@ def main():
 
 
 if __name__ == "__main__":
-    st.set_page_config(page_title="Informe", page_icon=":bar_chart:", layout="wide")
+    st.set_page_config(page_title="Readme", page_icon=":bar_chart:", layout="wide")
     main()
