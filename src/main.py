@@ -486,7 +486,6 @@ def main():
         on_change=set_json_file_data,
     )
 
-    st.write(st.session_state)
 
     def indio_attack(container):
         message = st.session_state.get("solution_for_request", None)
