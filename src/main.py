@@ -171,7 +171,7 @@ def main():
 
     stc = st.columns(4)
     with stc[0]:
-        st.title("Caribe Demo")
+        st.title("Caribe")
 
     with stc[1]:
         st.image(
@@ -445,8 +445,6 @@ def main():
                     preferences=preferences,
                 )
 
-                for i in ans.items():
-                    st.success(f"{i[0]}: {i[1][0]} Pullovers de Color {i[1][1]}")
                 st.session_state["solution_for_request"] = ans
             except Exception as e:
                 st.error(f"Error: {e}")
@@ -458,34 +456,35 @@ def main():
         binary_data = json.dumps(json_content).encode("utf-8")
         return binary_data
 
-    st.button(
-        "Ejecutar", on_click=lambda: bk_request(end_container), use_container_width=True
-    )
     st.download_button(
         label="Descargar Datos Introducidos",
         data=get_json_content_for_download(),
         file_name="resultados.json",
-        mime="text/csv",
+        mime="application/json",
         use_container_width=True,
     )
 
-    def set_json_file_data():
+    def set_json_file_data(container):
         file = st.session_state.get("uploaded_file", None)
         if not file:
-            st.error("Error al cargar el archivo, por favor vuelva a intentar")
+            with container:
+                st.error("Error al cargar el archivo, por favor vuelva a intentar")
             return
-        json_from_binary = json.loads(file.read())
-        st.write("Archivo caribeño cargado:")
-        st.write(json_from_binary)
-        st.session_state.update(json_from_binary)
+        try:
+            json_from_binary = json.loads(file.read())
+            st.session_state.update(json_from_binary)
+        except Exception as e:
+            with container:
+                st.error(
+                    f"Error al cargar el archivo, por favor vuelva a intentar: {e}"
+                )
 
     st.file_uploader(
         label="Cargar Datos desde un archivo caribeño",
         type=["json"],
         key="uploaded_file",
-        on_change=set_json_file_data,
+        on_change=lambda: set_json_file_data(end_container),
     )
-
 
     def indio_attack(container):
         message = st.session_state.get("solution_for_request", None)
@@ -508,7 +507,7 @@ def main():
 
         if str(username).startswith("@"):
             username = username[1:]
-        print("hey there. Im batman ")
+        print("hey there. Im batman")
         try:
             chat_id = get_chat_id(st.secrets["TELEGRAM_BOT_TOKEN"], username)
             if not chat_id:
@@ -535,7 +534,7 @@ def main():
 
 if __name__ == "__main__":
     st.set_page_config(
-        page_title="Caribe Demo",
+        page_title="Caribe App",
         page_icon=":",
         layout="wide",
         initial_sidebar_state="expanded",
