@@ -280,6 +280,9 @@ def PuLP_Solver(
                         assigned_pullovers[item][1],
                     )
 
+    for item in available_pullovers: 
+        available_pullovers[item] = int(available_pullovers[item])
+
     print("\nPullovers Restantes de cada Color: ")
     for color in available_pullovers:
         print(f"{available_pullovers[color]} pullovers de color {color}")
