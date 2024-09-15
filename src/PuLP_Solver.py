@@ -28,7 +28,7 @@ def PuLP_Solver(
     preferences={},
 ):
     colors = [color for color in available_pullovers.keys()]
-    
+
     total_pullovers = sum(amount for amount in available_pullovers.values())
 
     if len(faculties) > total_pullovers:
@@ -62,12 +62,12 @@ def PuLP_Solver(
             continue
 
         if pref_color in available:
-            choosen_color = pref_color
+            chosen_color = pref_color
         else:
-            choosen_color = random.choice(available)
+            chosen_color = random.choice(available)
 
-        available_pullovers[choosen_color] -= amount
-        assigned_pullovers[group] = (amount, choosen_color)
+        available_pullovers[chosen_color] -= amount
+        assigned_pullovers[group] = (amount, chosen_color)
         new_total -= amount
 
     # Initial assignment for faculties with fewer than 10 athletes
@@ -211,11 +211,7 @@ def PuLP_Solver(
                 assigned_color = j
                 available_pullovers[j] -= assigned_amount
                 break
-        assigned_pullovers[i] = (assigned_amount, assigned_color)
-
-    remaining_pullovers = {}
-    for color in available_pullovers:
-        remaining_pullovers.update({color: 0})
+        assigned_pullovers[i] = (int(assigned_amount), assigned_color)
 
     assigned_pullovers = dict(
         sorted(
@@ -227,27 +223,66 @@ def PuLP_Solver(
         )
     )
 
+    for faculty, value in assigned_pullovers.items():
+        if value[1] is None:
+            available = [
+                color
+                for color in available_pullovers
+                if available_pullovers[color] >= value[0]
+            ]
+            if faculty in preferences and preferences[faculty] in available:
+                assigned_pullovers[faculty] = (
+                    value[0],
+                    preferences[faculty],
+                )
+
+                available_pullovers[preferences[faculty]] -= value[0]
+            elif len(available) > 0:
+                assigned_pullovers[faculty] = (
+                    value[0],
+                    random.choice(available),
+                )
+
+                available_pullovers[assigned_pullovers[faculty][1]] -= value[0]
+            else:
+                available = sorted(
+                    [
+                        color
+                        for color in available_pullovers
+                        if available_pullovers[color] >= 0
+                    ]
+                )
+                assigned_pullovers[faculty] = (
+                    available_pullovers[available[0]],
+                    available[0],
+                )
+
+                available_pullovers[available[0]] = 0
+
     for item in assigned_pullovers:
         if item in athletes:
-            if athletes[item] < assigned_pullovers[item][0]:
-                remaining_pullovers[assigned_pullovers[item][1]] += (
+            if athletes[item] <= assigned_pullovers[item][0]:
+                available_pullovers[assigned_pullovers[item][1]] += (
                     assigned_pullovers[item][0] - athletes[item]
                 )
                 assigned_pullovers[item] = (athletes[item], assigned_pullovers[item][1])
             elif athletes[item] > assigned_pullovers[item][0]:
-                if remaining_pullovers[assigned_pullovers[item][1]]:
-                    aditional_pullovers = min(
-                        remaining_pullovers[assigned_pullovers[item][1]],
+                if available_pullovers[assigned_pullovers[item][1]]:
+                    additional_pullovers = min(
+                        available_pullovers[assigned_pullovers[item][1]],
                         athletes[item] - assigned_pullovers[item][0],
                     )
-                    remaining_pullovers[
+                    available_pullovers[
                         assigned_pullovers[item][1]
-                    ] -= aditional_pullovers
-                    athletes[item] += aditional_pullovers
+                    ] -= additional_pullovers
+                    assigned_pullovers[item] = (
+                        assigned_pullovers[item][0] + additional_pullovers,
+                        assigned_pullovers[item][1],
+                    )
 
     print("\nPullovers Restantes de cada Color: ")
-    for color in remaining_pullovers:
-        print(f"{remaining_pullovers[color]} pullovers de color {color}")
+    for color in available_pullovers:
+        print(f"{available_pullovers[color]} pullovers de color {color}")
     print("\n")
 
-    return (assigned_pullovers, remaining_pullovers)
+    return (assigned_pullovers, available_pullovers)
